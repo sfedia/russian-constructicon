@@ -63,6 +63,13 @@ class LexicalEntry:
     def __init__(self, entry_tag):
         self.entry_tag = entry_tag
 
+    def test_entry(self, filter_dict):
+        return  self.name_prefix(filter_dict["prefix"]) or \
+                self.cefr(filter_dict["cefr"]) or \
+                self.language(filter_dict["language"]) or \
+                self.toksem_and_filsem(filter_dict["sem_search"]) or \
+                self.structure_contains(filter_dict["structure"])
+
     def name_prefix(self, prefix):
         try:
             name_elem = self.entry_tag.xpath("Sense/feat[@att='illustration']")[0]
