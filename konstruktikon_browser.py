@@ -1,12 +1,6 @@
 #!/usr/bin/python3
 
 from lxml import etree
-from lxml.etree import fromstring
-import muskrat
-from muskrat.parser import *
-from muskrat.allocator import *
-from muskrat.connectivity import Accept, Attach
-from muskrat.class_generator import *
 import re
 
 
