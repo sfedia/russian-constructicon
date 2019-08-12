@@ -4,11 +4,25 @@ from lxml import etree
 import re
 
 
+class Entry2HTML:
+    def __init__(self, entry):
+        ...
+
+
 class Browser:
     def __init__(self, konst_file):
         self.konst_file = konst_file
         self.konst_xml = etree.parse(konst_file)
         self.lex = self.konst_xml.xpath("/LexicalResource/Lexicon")[0]
+
+    def entries_walk(self, search_request):
+        # TODO: replace with iterator
+        entries = []
+        for entry in self.lex.xpath("//LexicalEntry"):
+            if entry.test_entry(search_request):
+                entries.append(entry)
+
+        return entries
 
 
 class StructureParser:
