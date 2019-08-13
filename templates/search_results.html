@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>
+<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<style>
+        /* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+.container {
+  width: auto;
+  padding: 0 15px;
+}
+
+.foot.container {
+  padding: 10px 15px;
+}
+
+.footer {
+  background-color: #f5f5f5;
+}
+
+.navbar-brand {
+  font-family: Times New Roman;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: black !important;
+}
+</style>
+</head>
+<!------ Include the above in your HEAD tag ---------->
+
+<body class="d-flex flex-column h-100">
+
+
+<main role="main" class="flex-shrink-0">
+
+<div class="container">
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Russian Constructicon</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Link</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Link</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+    <hgroup class="mb20">
+		<h2 class="lead"><strong class="text-danger">{{count}}</strong> entries were found</h2>
+	</hgroup>
+
+    <section class="col-xs-12 col-sm-6 col-md-12">
+        {% for entry_item in entries %}
+		<article class="search-result row">
+			<div class="col-xs-12 col-sm-12 col-md-3">
+				<a href="#" title="{{entry_item['name']}}" class="thumbnail">
+                    <div class="structure_jstree">
+                        {{entry_item['structure_jstree']}}
+                    </div>
+                </a>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-2">
+				<ul class="meta-search">
+					<li><i class="glyphicon glyphicon-magnet"></i> <span>{{entry_item['illustration']}}</span></li>
+					<li><i class="glyphicon glyphicon-time"></i> <span>4:28 pm</span></li>
+					<li><i class="glyphicon glyphicon-user"></i> <span>{{entry_item['cefr']}}</span></li>
+				</ul>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+				<h3><a href="#" title="">{{entry_item['name']}}</a></h3>
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td class="item-role definition">DEFINITION</td>
+                      <td>{{entry_item['definition']}}</td>
+                    </tr>
+                    {% for example_ in entry_item['examples'] %}
+                    <tr>
+                      <td class="item-role example">EXAMPLE</td>
+                      <td>{{example_['sentence']}}</td>
+                      <td class="example-name">{{example_['name']}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <span class="plus"><a href="#" title="Lorem ipsum"><i class="glyphicon glyphicon-save"></i></a></span>
+			</div>
+			<span class="clearfix borda"></span>
+		</article>
+        {% endfor %}
+	</section>
+    <div class="text-center">
+        <ul class="pagination">
+          <li><a href="{{index_url[0]}}">&laquo;</a></li>
+          {% for index in page_indexes %}
+            {% if index == selected_index %}
+                <li class="active"><a href="#">{{index}}</a></li>
+            {% else %}
+                <li><a href="{{index_url[index-1]}}">{{index}}</a></li>
+            {% endif %}
+          {% endfor %}
+          <li><a href="{{index_url[-1]}}">&raquo;</a></li>
+        </ul>
+    </div>
+</div>
+</main>
+
+
+<footer class="footer mt-auto py-3">
+  <div class="foot container">
+    <span class="text-muted">Place sticky footer content here.</span>
+  </div>
+</footer>
+
+<script>
+  $(function () {
+    // 6 create an instance when the DOM is ready
+    $('#jstree').jstree();
+    // 7 bind to events triggered on the tree
+    $('#jstree').on("changed.jstree", function (e, data) {
+      console.log(data.selected);
+    });
+    // 8 interact with the tree - either way is OK
+    $('button').on('click', function () {
+      $('#jstree').jstree(true).select_node('child_node_1');
+      $('#jstree').jstree('select_node', 'child_node_1');
+      $.jstree.reference('#jstree').select_node('child_node_1');
+    });
+  });
+</script>
+</body>
+</html>
