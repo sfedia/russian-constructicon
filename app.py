@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return render_template("hello_world.html")
+    return render_template("main_page.html")
 
 
 def karp_example2html(example_tag):
@@ -35,7 +35,7 @@ def ajax_hints():
             {"error": "Prefix expected, but was not found"}
         )
 
-    limit = 5 if "limit" not in request.args else request.args["limit"]
+    limit = 5 if "limit" not in request.args else int(request.args["limit"])
     hints = []
 
     for entry in browser.entries_walk({
@@ -44,9 +44,9 @@ def ajax_hints():
         name = entry.xpath("Sense")[0].attrib["id"]
         meta, name = name.split("--")
         hints.append(" ".join(name.split("_")))
+        limit -= 1
         if not limit:
             break
-        limit -= 1
 
     return jsonify(
         {"hints": hints}
