@@ -4,11 +4,6 @@ from lxml import etree
 import re
 
 
-class Entry2HTML:
-    def __init__(self, entry):
-        ...
-
-
 class Browser:
     def __init__(self, konst_file):
         self.konst_file = konst_file
@@ -19,7 +14,7 @@ class Browser:
         # TODO: replace with iterator
         entries = []
         for entry in self.lex.xpath("//LexicalEntry"):
-            if entry.test_entry(search_request):
+            if LexicalEntry(entry).test_entry(search_request):
                 entries.append(entry)
 
         return entries
@@ -70,7 +65,7 @@ class StructureParser:
     @staticmethod
     def test(filt):
         # TODO
-        return True
+        return False
 
 
 class LexicalEntry:
@@ -78,21 +73,24 @@ class LexicalEntry:
         self.entry_tag = entry_tag
 
     def test_entry(self, filter_dict):
-        return  self.name_prefix(filter_dict["prefix"]) or \
-                self.cefr(filter_dict["cefr"]) or \
-                self.language(filter_dict["language"]) or \
-                self.toksem_and_filsem(filter_dict["sem_search"]) or \
-                self.structure_contains(filter_dict["structure"])
+        return (
+                ("prefix" in filter_dict and self.name_prefix(filter_dict["prefix"])) or
+                ("sem_search" in filter_dict and self.toksem_and_filsem(filter_dict["sem_search"])) or
+                ("structure" in filter_dict and self.structure_contains(filter_dict["structure"]))
+               ) and \
+               (
+                ("cefr" not in filter_dict or self.cefr(filter_dict["cefr"])) and
+                ("language" not in filter_dict or self.language(filter_dict["language"]))
+               )
 
     def name_prefix(self, prefix):
-        try:
-            name_elem = self.entry_tag.xpath("Sense/feat[@att='illustration']")[0]
-        except IndexError:
-            return False
-
+        name = self.entry_tag.xpath("Sense")[0].attrib["id"]
+        meta, name = name.split("--")
+        name = " ".join(name.lower().split("_"))
         prefix = " ".join(prefix.lower().split())
+
         try:
-            return " ".join(name_elem.attrib["val"].lower().split()).startswith(prefix)
+            return name.startswith(prefix)
         except KeyError:
             return False
 
@@ -110,7 +108,7 @@ class LexicalEntry:
     @staticmethod
     def language(language_options):
         # TODO
-        return True
+        return False
 
     def toksem_and_filsem(self, filsem):
         try:
@@ -134,9 +132,11 @@ class LexicalEntry:
         return False
 
 
+"""
 browser = Browser("konstruktikon.xml")
 entry1 = browser.lex.xpath("LexicalEntry")[0]
 entry1 = LexicalEntry(entry1)
 
 print(entry1.toksem_and_filsem(["Theme"]))
+"""
 
