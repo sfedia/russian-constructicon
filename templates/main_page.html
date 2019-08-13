@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>
+<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<style>
+        /* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+.container {
+  width: auto;
+  padding: 0 15px;
+}
+
+.foot.container {
+  padding: 10px 15px;
+}
+
+.footer {
+  background-color: #f5f5f5;
+}
+
+.navbar-brand {
+  font-family: Times New Roman;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: black !important;
+}
+
+#structure-query {
+  max-width: 600px;
+}
+
+.semantic-roles ul,
+.cefr-options ul {
+  column-count: 4;
+  column-gap: 2rem;
+  list-style: none;
+}
+
+.cefr-options ul {
+  column-count: 2;
+}
+</style>
+
+<script>
+    $(function(){
+      $("a[href*='#panel']").click(function(e){
+        e.preventDefault();
+        $(this).tab('show');
+      });
+
+      $(".prefix-browse").click(function (e) {
+        window.location.href = "/search?q=" + JSON.stringify({"prefix": $("#search-prefix").val()});
+      });
+
+      $(".browse-const").click(function (e) {
+        var searchQuery = {};
+        searchQuery.sem_search = [];
+        $(".semantic-roles ul li div label input[type=checkbox]").each(function (num, el) {
+            if (el.checked)
+                searchQuery.sem_search.push(el.value);
+        });
+        if (searchQuery.sem_search.length === 0)
+            delete searchQuery.sem_search;
+
+        searchQuery.cefr = [];
+        $(".cefr-options ul li div label input[type=checkbox]").each(function (num, el) {
+            if (el.checked)
+                searchQuery.cefr.push(el.value);
+        });
+        if (searchQuery.cefr.length === 0)
+            delete searchQuery.cefr;
+
+        if ($("#structure-query").val() !== "")
+            searchQuery.structure = $("#structure-query").val();
+
+        window.location.href = "/search?q=" + encodeURIComponent(JSON.stringify(searchQuery));
+      });
+    });
+</script>
+</head>
+<!------ Include the above in your HEAD tag ---------->
+
+<body class="d-flex flex-column h-100">
+
+
+<main role="main" class="flex-shrink-0">
+
+<div class="container">
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Russian Constructicon</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+          <!--
+        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Link</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li> -->
+      </ul>
+      <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" class="form-control" id="search-prefix" placeholder="Search by prefix">
+        </div>
+        <button type="button" class="btn btn-default prefix-browse">Browse</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+          <li><a href="//github.com/prodotiscus/russian-constructicon">Developed & deployed by Fyodor Sizov</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="col-lg-8 col-lg-offset-2">
+    <ul class="nav nav-tabs">
+        <li><a data-toggle="tab" href="#panel1">Add: <b>Structure</b></a></li>
+        <li class="active"><a data-toggle="tab" href="#panel2">Add: <b>Semantic roles</b></a></li>
+        <li><a data-toggle="tab" href="#panel3">Add: <b>CEFR</b></a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="panel1" class="tab-pane fade">
+        <h3>Structure query</h3>
+        <p>
+            <div class="form-group">
+              <textarea class="form-control" rows="3" placeholder="Structure query" id="structure-query"></textarea>
+            </div>
+        </p>
+      </div>
+      <div id="panel2" class="tab-pane fade in active">
+        <h3>Semantic roles</h3>
+        <p>
+            <div class="form-group semantic-roles">
+                <ul>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Actant">Actant</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Action">Action</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Activity">Activity</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Agent">Agent</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Assessment">Assessment</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Associated">Associated</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Assumption">Assumption</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Beneficiary">Beneficiary</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Cause">Cause</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Circumstance">Circumstance</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Conclusion">Conclusion</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Condition">Condition</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Container">Container</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Context">Context</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Copula">Copula</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Estimation">Estimation</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Evaluation">Evaluation</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Event">Event</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Action">Action</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Evidence">Evidence</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Experiencer">Experiencer</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Factor">Factor</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Goal">Goal</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Intensifier">Intensifier</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Limitation">Limitation</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Link">Link</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Location">Location</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Number">Number</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Object">Object</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Participant">Participant</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Patient">Patient</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Property">Property</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Protagonist">Protagonist</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Prototype">Prototype</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Purpose">Purpose</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Quality">Quality</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Quantity">Quantity</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Reason">Reason</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Recipient">Recipient</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Referent">Referent</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Result">Result</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Role">Role</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Set">Set</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Situation">Situation</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Source">Source</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Standard">Standard</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="State">State</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Stimulus">Stimulus</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Theme">Theme</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Time">Time</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="Topic">Topic</label>
+                </div></li>
+                </ul>
+            </div>
+        </p>
+      </div>
+      <div id="panel3" class="tab-pane fade">
+        <p>
+            <div class="form-group cefr-options">
+                <ul>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="A1">A1</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="A2">A2</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="B1">B1</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="B2">B2</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="C1">C1</label>
+                </div></li>
+                <li><div class="checkbox">
+                  <label><input type="checkbox" value="C2">C2</label>
+                </div></li>
+                </ul>
+            </div>
+        </p>
+      </div>
+    </div>
+    <a href="#" class="btn btn-success browse-const" role="button" style="text-align: center; display: block;">
+        Browse Constructicon
+    </a>
+</div>
+
+</div>
+</main>
+
+
+<footer class="footer mt-auto py-3">
+  <div class="foot container">
+    <span>
+        Developed & deployed by <a href="//github.com/prodotiscus/russian-constructicon">Fyodor Sizov</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  $(function () {
+    // 6 create an instance when the DOM is ready
+    $('#jstree').jstree();
+    // 7 bind to events triggered on the tree
+    $('#jstree').on("changed.jstree", function (e, data) {
+      console.log(data.selected);
+    });
+    // 8 interact with the tree - either way is OK
+    $('button').on('click', function () {
+      $('#jstree').jstree(true).select_node('child_node_1');
+      $('#jstree').jstree('select_node', 'child_node_1');
+      $.jstree.reference('#jstree').select_node('child_node_1');
+    });
+  });
+</script>
+</body>
+</html>
