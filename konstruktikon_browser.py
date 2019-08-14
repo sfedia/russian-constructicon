@@ -147,13 +147,3 @@ class LexicalEntry:
             return parser.original_test(struct_filter)
 
         return False
-
-
-"""
-browser = Browser("konstruktikon.xml")
-entry1 = browser.lex.xpath("LexicalEntry")[0]
-entry1 = LexicalEntry(entry1)
-
-print(entry1.toksem_and_filsem(["Theme"]))
-"""
-
