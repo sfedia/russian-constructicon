@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import json
 from lxml import etree
 import re
 
@@ -22,6 +23,7 @@ class Browser:
 
 class StructureParser:
     def __init__(self, q):
+        self.original = q
         q = re.sub("\[(\w+)\]", "<\g<1>/>", q)
         q = re.sub("\[(\w+)", "<\g<1>>", q)
         q = q.replace(" ", "")
@@ -52,6 +54,10 @@ class StructureParser:
 
         self.tree = etree.fromstring(q)
 
+    """def get_json(self):
+        transform = etree.XSLT(self.tree)
+        json_load = json.loads(str(result))"""
+
     @staticmethod
     def between_tags(tag1, tag2, same_level=True):
         query = "//*["
@@ -66,6 +72,11 @@ class StructureParser:
     def test(filt):
         # TODO
         return False
+
+    def original_test(self, substring):
+        return re.search(
+            r'(^|[\s\[\]])' + re.escape(substring) + r'([\s\[\]]|$)', self.original
+        ) is not None
 
 
 class LexicalEntry:
@@ -126,8 +137,9 @@ class LexicalEntry:
         structures = self.entry_tag.xpath("Sense/feat[@att='structure']")
         for struct in structures:
             parser = StructureParser(struct)
-            if parser.test(struct_filter):
-                return True
+            """if parser.test(struct_filter):
+                return True"""
+            return parser.original_test(struct_filter)
 
         return False
 
