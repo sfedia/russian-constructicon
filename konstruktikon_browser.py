@@ -52,7 +52,8 @@ class StructureParser:
             for tag in reversed(group):
                 q = q.replace("]", "</" + tag[1:], 1)
 
-        self.tree = etree.fromstring(q)
+        q = re.sub(r'(</root>).+', '\g<1>', q)
+        #self.tree = etree.fromstring(q)
 
     """def get_json(self):
         transform = etree.XSLT(self.tree)
@@ -74,9 +75,13 @@ class StructureParser:
         return False
 
     def original_test(self, substring):
+        substring = re.escape(substring)
+        substring = re.sub(r'\]+$', r']+', substring)
         return re.search(
-            r'(^|[\s\[\]])' + re.escape(substring) + r'([\s\[\]]|$)', self.original
+            r'(^|[\s\[\]])' + substring + r'([\s\[\]]|$)',
+            self.original
         ) is not None
+
 
 
 class LexicalEntry:
@@ -136,7 +141,7 @@ class LexicalEntry:
     def structure_contains(self, struct_filter):
         structures = self.entry_tag.xpath("Sense/feat[@att='structure']")
         for struct in structures:
-            parser = StructureParser(struct)
+            parser = StructureParser(struct.attrib["val"])
             """if parser.test(struct_filter):
                 return True"""
             return parser.original_test(struct_filter)
