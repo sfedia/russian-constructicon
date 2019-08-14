@@ -94,7 +94,7 @@ def browser_search():
         meta, name = name.split("--")
         entry_dict["name"] = " ".join(name.split("_"))
 
-        for param in ["cefr", "illustration"]:
+        for param in ["cefr", "illustration", "structure"]:
             try:
                 entry_dict[param] = tag.xpath("Sense/feat[@att='{0}']".format(param))[0].attrib["val"]
             except IndexError:
