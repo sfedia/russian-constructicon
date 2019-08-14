@@ -38,8 +38,10 @@ main div.container {
 </style>
 
 <script>
-    $(".prefix-browse").click(function (e) {
-      window.location.href = "/search?q=" + JSON.stringify({"prefix": $("#search-prefix").val()});
+    $(function () {
+       $(".prefix-browse").click(function (e) {
+          window.location.href = "/search?q=" + JSON.stringify({"prefix": $("#search-prefix").val()});
+       });
     });
 </script>
 </head>
