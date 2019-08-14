@@ -147,6 +147,12 @@
       <div id="panel1" class="tab-pane fade">
         <h3>Structure query</h3>
         <p>
+            The query should match a sequence included in the tree (can be the whole tree):<br>
+            <ul>
+                <li>
+                    e.g.: <code>[advmod разве] [advmod не]</code> will be found in <code>[root [advmod разве] [advmod не] NP-Nom]</code>
+                </li>
+            </ul>
             <div class="form-group">
               <textarea class="form-control" rows="3" placeholder="Structure query" id="structure-query"></textarea>
             </div>
