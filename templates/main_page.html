@@ -68,7 +68,7 @@ main div.container {
 
       $(".prefix-browse").click(fastBrowsing);
       $("#search-prefix").keypress(function (e) {
-        if (e.which == 13)
+        if (e.which === 13)
           fastBrowsing(e);
       });
 
