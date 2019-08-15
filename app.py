@@ -64,7 +64,14 @@ def browser_search():
 
     offset = 0 if "offset" not in request.args else int(request.args["offset"])
     selected_index = 1 if "index" not in request.args else int(request.args["index"])
-    query = json.loads(request.args["q"])
+
+    try:
+        query = json.loads(request.args["q"])
+        if type(query) != dict:
+            raise json.decoder.JSONDecodeError
+    except json.decoder.JSONDecodeError:
+        return "Invalid request"
+
     results = browser.entries_walk(query)
     max_on_page = 5
     max_offsets = 20
