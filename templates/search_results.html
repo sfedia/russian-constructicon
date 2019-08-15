@@ -54,11 +54,20 @@ main div.container {
 
 <script>
     $(function () {
-       $(".prefix-browse").click(function (e) {
-          window.location.href = "/search?q=" + encodeURIComponent(
-            JSON.stringify({prefix: $("#search-prefix").val()})
-          );
-       });
+
+      fastBrowsing = function (e) {
+        e.preventDefault();
+        window.location.href = "/search?q=" + encodeURIComponent(
+          JSON.stringify({prefix: $("#search-prefix").val().trimEnd("\n")})
+        );
+      };
+
+      $(".prefix-browse").click(fastBrowsing);
+      $("#search-prefix").keypress(function (e) {
+        if (e.which == 13)
+          fastBrowsing(e);
+      });
+
     });
 </script>
 </head>

@@ -52,16 +52,24 @@ main div.container {
 </style>
 
 <script>
-    $(function(){
+    $(function () {
+
       $("a[href*='#panel']").click(function(e){
         e.preventDefault();
         $(this).tab('show');
       });
 
-      $(".prefix-browse").click(function (e) {
+      fastBrowsing = function (e) {
+        e.preventDefault();
         window.location.href = "/search?q=" + encodeURIComponent(
-          JSON.stringify({prefix: $("#search-prefix").val()})
+          JSON.stringify({prefix: $("#search-prefix").val().trimEnd("\n")})
         );
+      };
+
+      $(".prefix-browse").click(fastBrowsing);
+      $("#search-prefix").keypress(function (e) {
+        if (e.which == 13)
+          fastBrowsing(e);
       });
 
       $(".browse-const").click(function (e) {
@@ -87,6 +95,7 @@ main div.container {
 
         window.location.href = "/search?q=" + encodeURIComponent(JSON.stringify(searchQuery));
       });
+
     });
 </script>
 </head>
