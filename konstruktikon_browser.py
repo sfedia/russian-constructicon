@@ -83,7 +83,6 @@ class StructureParser:
         ) is not None
 
 
-
 class LexicalEntry:
     def __init__(self, entry_tag):
         self.entry_tag = entry_tag
@@ -92,7 +91,8 @@ class LexicalEntry:
         return (
                 ("prefix" in filter_dict and self.name_prefix(filter_dict["prefix"])) or
                 ("sem_search" in filter_dict and self.toksem_and_filsem(filter_dict["sem_search"])) or
-                ("structure" in filter_dict and self.structure_contains(filter_dict["structure"]))
+                ("structure" in filter_dict and self.structure_contains(filter_dict["structure"])) or
+                ("prefix" not in filter_dict and "sem_search" not in filter_dict and "structure" not in filter_dict)
                ) and \
                (
                 ("cefr" not in filter_dict or self.cefr(filter_dict["cefr"])) and
