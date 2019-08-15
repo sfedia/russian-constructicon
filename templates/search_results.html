@@ -56,7 +56,7 @@ main div.container {
     $(function () {
        $(".prefix-browse").click(function (e) {
           window.location.href = "/search?q=" + encodeURIComponent(
-            JSON.stringify({"prefix": $("#search-prefix").val()})
+            JSON.stringify({prefix: $("#search-prefix").val()})
           );
        });
     });
