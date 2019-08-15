@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 from flask import Flask, jsonify, Markup, render_template, request
 from lxml import etree
 import json
@@ -67,7 +68,6 @@ def browser_search():
     results = browser.entries_walk(query)
     max_on_page = 5
     max_offsets = 20
-    pages_count = None
 
     basic_url = SEARCH_URL + "?q=" + urllib.parse.quote(request.args["q"])
     index_url = [basic_url]
