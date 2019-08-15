@@ -55,7 +55,9 @@ main div.container {
 <script>
     $(function () {
        $(".prefix-browse").click(function (e) {
-          window.location.href = "/search?q=" + JSON.stringify({"prefix": $("#search-prefix").val()});
+          window.location.href = "/search?q=" + encodeURIComponent(
+            JSON.stringify({"prefix": $("#search-prefix").val()})
+          );
        });
     });
 </script>
