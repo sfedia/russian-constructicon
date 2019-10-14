@@ -20,7 +20,7 @@ def hello_world():
 def karp_example2html(example_tag):
     inner_html = etree.tostring(example_tag, pretty_print=True, encoding="unicode")
     x = re.sub(r"</?karp:example.*>", "", inner_html)
-    x = re.sub(r"</?definition>", "", x) # if 'definition' tag was passed in args
+    x = re.sub(r"</?definition>", "", x) # if 'definition' tag was passed in args2
     x = re.sub(r'<karp:e\s+.*name="([^"]+)"[^>]*>', '<font color="red"><small>\g<1>[</small></font>', x)
     x = re.sub(r'</karp:e>(?=[\n\s\t]*<karp:[^g])', '<font color="red"></small>]</small></font>&nbsp;', x)
     x = re.sub(r'</karp:e>', '<font color="red"></small>]</small></font>', x)
