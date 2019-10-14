@@ -91,6 +91,7 @@ class LexicalEntry:
         return (
                 ("prefix" in filter_dict and self.name_prefix(filter_dict["prefix"])) or
                 ("sem_search" in filter_dict and self.toksem_and_filsem(filter_dict["sem_search"])) or
+                ("gram_search" in filter_dict and self.gram_search(filter_dict["gram_search"])) or
                 ("structure" in filter_dict and self.structure_contains(filter_dict["structure"])) or
                 ("prefix" not in filter_dict and "sem_search" not in filter_dict and "structure" not in filter_dict)
                ) and \
@@ -124,6 +125,13 @@ class LexicalEntry:
     @staticmethod
     def language(language_options):
         # TODO
+        return False
+
+    def gram_search(self, gram_values):
+        name = self.entry_tag.xpath("Sense")[0].attrib["id"]
+        for value in gram_values:
+            if value in name:
+                return True
         return False
 
     def toksem_and_filsem(self, filsem):
