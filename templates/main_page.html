@@ -82,6 +82,14 @@ main div.container {
         if (searchQuery.sem_search.length === 0)
             delete searchQuery.sem_search;
 
+        searchQuery.gram_search = [];
+        $(".gram-search ul li div label input[type=checkbox]").each(function (num, el) {
+            if (el.checked)
+                searchQuery.gram_search.push(el.value);
+        });
+        if (searchQuery.gram_search.length === 0)
+            delete searchQuery.gram_search;
+
         searchQuery.cefr = [];
         $(".cefr-options ul li div label input[type=checkbox]").each(function (num, el) {
             if (el.checked)
@@ -157,8 +165,8 @@ main div.container {
         <li class="active"><a data-toggle="tab" href="#panel2">Content categories</a></li>
         <li><a data-toggle="tab" href="#panel4">Gr. categories</a></li>
         <li><a data-toggle="tab" href="#panel3">CEFR Level</a></li>
-        <li><a data-toggle="tab" href="/test1">Daily dose</a></li>
-        <li><a data-toggle="tab" href="/test2">Browse</a></li>
+        <li><a href="/test1">Daily dose</a></li>
+        <li><a href="/test2">Browse</a></li>
     </ul>
 
     <div class="tab-content">
@@ -357,6 +365,36 @@ main div.container {
                 <li><div class="checkbox">
                   <label><input type="checkbox" value="C2">C2</label>
                 </div></li>
+                </ul>
+            </div>
+        </p>
+      </div>
+      <div id="panel4" class="tab-pane fade in active">
+        <h3>Grammatical categories</h3>
+        <p>
+            <div class="form-group gram-search">
+                <ul>
+                    <li><div class="checkbox">
+                      <label><input type="checkbox" value="Nom">Nominative case</label>
+                    </div></li>
+                    <li><div class="checkbox">
+                      <label><input type="checkbox" value="Gen">Genitive case</label>
+                    </div></li>
+                    <li><div class="checkbox">
+                      <label><input type="checkbox" value="Dat">Dative case</label>
+                    </div></li>
+                    <li><div class="checkbox">
+                      <label><input type="checkbox" value="Acc">Accusative case</label>
+                    </div></li>
+                    <li><div class="checkbox">
+                      <label><input type="checkbox" value="Ins">Instrumental case</label>
+                    </div></li>
+                    <li><div class="checkbox">
+                      <label><input type="checkbox" value="Imper">Imperfective aspect</label>
+                    </div></li>
+                    <li><div class="checkbox">
+                      <label><input type="checkbox" value="Perf">Perfective aspect</label>
+                    </div></li>
                 </ul>
             </div>
         </p>
