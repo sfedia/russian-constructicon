@@ -173,12 +173,7 @@ small, font[color=red] {
                     {% endfor %}
                   </tbody>
                 </table>
-                {% for (n, cat_) in enumerate(entry_item['content_cats']) %}
-                    <font color="red"><small>{{cat_}}</small></font>
-                    {% if n != len(entry_item['content_cats']) - 1 %}
-                    ,&nbsp;
-                    {% endif %}
-                {% endfor %}
+                {{entry_item['content_cats']}}
 			</div>
 			<span class="clearfix borda"></span>
 		</article>
