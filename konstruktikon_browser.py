@@ -93,7 +93,11 @@ class LexicalEntry:
                 ("sem_search" in filter_dict and self.toksem_and_filsem(filter_dict["sem_search"])) or
                 ("gram_search" in filter_dict and self.gram_search(filter_dict["gram_search"])) or
                 ("structure" in filter_dict and self.structure_contains(filter_dict["structure"])) or
-                ("prefix" not in filter_dict and "sem_search" not in filter_dict and "structure" not in filter_dict)
+                ("prefix" not in filter_dict and
+                    "sem_search" not in filter_dict
+                    and "gram_search" not in filter_dict
+                    and "structure" not in filter_dict
+                 )
                ) and \
                (
                 ("cefr" not in filter_dict or self.cefr(filter_dict["cefr"])) and
