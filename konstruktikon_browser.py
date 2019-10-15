@@ -2,6 +2,7 @@
 
 import json
 from lxml import etree
+from random import shuffle
 import re
 
 
@@ -14,11 +15,17 @@ class Browser:
     def entries_walk(self, search_request):
         # TODO: replace with iterator
         entries = []
+        
+        r_entries = self.lex.xpath("//LexicalEntry")
+
+        if "daily_dose" in search_request:
+            shuffle(r_entries)
+
         for entry in self.lex.xpath("//LexicalEntry"):
             if LexicalEntry(entry).test_entry(search_request):
                 entries.append(entry)
 
-        return entries
+        return entries if "daily_dose" not in search_request else entries[search_request["daily_dose"]]
 
 
 class StructureParser:

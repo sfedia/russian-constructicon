@@ -73,6 +73,19 @@ main div.container {
           fastBrowsing(e);
       });
 
+      $(".daily-dose").click(function (e) {
+        var searchQuery = {};
+        searchQuery.cefr = [];
+        $(".cefr-options ul li div label input[type=checkbox]").each(function (num, el) {
+            if (el.checked)
+                searchQuery.cefr.push(el.value);
+        });
+        if (searchQuery.cefr.length === 0)
+            delete searchQuery.cefr;
+        searchQuery.daily_dose = 5;
+        window.location.href = "/search?q=" + encodeURIComponent(JSON.stringify(searchQuery));
+      });
+
       $(".browse-const").click(function (e) {
         var searchQuery = {};
         searchQuery.sem_search = [];
