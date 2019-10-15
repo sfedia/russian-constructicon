@@ -117,9 +117,9 @@ def browser_search():
 
         entry_dict["definition"] = karp_example2html(tag.xpath("Sense/definition")[0])
         entry_dict["content_cats"] = karp_example2cats(tag.xpath("Sense/definition")[0])
-        entry_dict["content_cats"] = ",&nbsp;".join([
+        entry_dict["content_cats"] = Markup(",&nbsp;".join([
             '<font color="red"><small>{0}</small></font>'.format(cat) for cat in entry_dict["content_cats"]
-        ])
+        ]))
 
         karp = dict(namespaces={
             "karp": "http://spraakbanken.gu.se/eng/research/infrastructure/karp/karp"
