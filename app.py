@@ -119,7 +119,8 @@ def browser_search():
         entry_dict["content_cats"] = karp_example2cats(tag.xpath("Sense/definition")[0])
         entry_dict["content_cats"] = Markup(",&nbsp;".join([
             '<font color="red" class="ccat"><small class="ccat">{0}</small></font>'.format(cat)
-            for cat in entry_dict["content_cats"]
+            for cat in set(entry_dict["content_cats"])
+            if not re.search(r'[А-Яа-я]', cat)
         ]))
 
         karp = dict(namespaces={
