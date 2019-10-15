@@ -73,6 +73,18 @@ main div.container {
           fastBrowsing(e);
       });
 
+      $(".just-browse").click(function (e) {
+        var searchQuery = {};
+        searchQuery.cefr = [];
+        $(".cefr-options ul li div label input[type=checkbox]").each(function (num, el) {
+            if (el.checked)
+                searchQuery.cefr.push(el.value);
+        });
+        if (searchQuery.cefr.length === 0)
+            delete searchQuery.cefr;
+        window.location.href = "/search?q=" + encodeURIComponent(JSON.stringify(searchQuery));
+      });
+
       $(".daily-dose").click(function (e) {
         var searchQuery = {};
         searchQuery.cefr = [];
@@ -180,7 +192,7 @@ main div.container {
         <li><a data-toggle="tab" href="#panel4">Gr. categories</a></li>
         <li><a data-toggle="tab" href="#panel3">CEFR Level</a></li>
         <li><a href="#" class="daily-dose">Daily dose</a></li>
-        <li><a href="/test2">Browse</a></li>
+        <li><a href="#" class="just-browse">Browse</a></li>
         <li><a data-toggle="tab" href="#panel5"><i>Instructions</i></a></li>
     </ul>
 
