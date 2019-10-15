@@ -21,7 +21,7 @@ class Browser:
         if "daily_dose" in search_request:
             shuffle(r_entries)
 
-        for entry in self.lex.xpath("//LexicalEntry"):
+        for entry in r_entries:
             if LexicalEntry(entry).test_entry(search_request):
                 entries.append(entry)
 
