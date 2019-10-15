@@ -25,7 +25,7 @@ class Browser:
             if LexicalEntry(entry).test_entry(search_request):
                 entries.append(entry)
 
-        return entries if "daily_dose" not in search_request else entries[search_request["daily_dose"]]
+        return entries if "daily_dose" not in search_request else entries[:search_request["daily_dose"]]
 
 
 class StructureParser:
