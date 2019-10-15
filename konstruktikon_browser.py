@@ -15,7 +15,7 @@ class Browser:
     def entries_walk(self, search_request):
         # TODO: replace with iterator
         entries = []
-        
+
         r_entries = self.lex.xpath("//LexicalEntry")
 
         if "daily_dose" in search_request:
