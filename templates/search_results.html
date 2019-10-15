@@ -173,11 +173,11 @@ small, font[color=red] {
                     {% endfor %}
                   </tbody>
                 </table>
-                <span class="plus">
-                    <a href="#" title="Download this entry (XML)">
-                        <i class="glyphicon glyphicon-save"></i>
-                    </a>
-                </span>
+                {% for n, cat_ in enumerate(entry_item['content_cats']) %}
+                    <font color="red"><small>{{cat_}}</small></font>
+                    {% if n != len(entry_item['content_cats']) - 1 %}, {% endif %}
+                {
+                {% endfor %}
 			</div>
 			<span class="clearfix borda"></span>
 		</article>

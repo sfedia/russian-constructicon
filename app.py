@@ -28,6 +28,13 @@ def karp_example2html(example_tag):
     x = re.sub(r'</*karp:text[^>]*/*\s*>', '', x)
     return Markup(x)
 
+def karp_example2cats(example_tag):
+    inner_html = etree.tostring(example_tag, pretty_print=True, encoding="unicode")
+    x = re.sub(r"</?karp:example.*>", "", inner_html)
+    x = re.sub(r"</?definition>", "", x)  # if 'definition' tag was passed in args2
+    cats = [mth.group(1) for mth in re.finditer(r'<karp:e\s+.*name="([^"]+)"[^>]*>', x)]
+    return cats
+
 
 @app.route("/hints")
 def ajax_hints():
@@ -108,6 +115,7 @@ def browser_search():
                 entry_dict[param] = "?"
 
         entry_dict["definition"] = karp_example2html(tag.xpath("Sense/definition")[0])
+        entry_dict["content_cats"] = karp_example2cats(tag.xpath("Sense/definition")[0])
 
         karp = dict(namespaces={
             "karp": "http://spraakbanken.gu.se/eng/research/infrastructure/karp/karp"
