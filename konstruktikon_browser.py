@@ -139,7 +139,6 @@ class LexicalEntry:
         return False
 
     def gram_search(self, gram_values):
-        return False
         name = self.entry_tag.xpath("Sense")[0].attrib["id"]
         for value in gram_values:
             if value in name:
