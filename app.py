@@ -106,8 +106,8 @@ def browser_search():
     for tag in found:
         entry_dict = {}
         name = tag.xpath("Sense")[0].attrib["id"]
-        meta, name = name.split("--")
         entry_dict["ID"] = name
+        meta, name = name.split("--")
         entry_dict["name"] = " ".join(name.split("_"))
 
         for param in ["cefr", "illustration", "structure"]:
