@@ -59,6 +59,19 @@ small:not(.ccat), font[color=red]:not(.ccat) {
 <script>
     $(function () {
 
+      $('[contenteditable]').on('focus', function() {
+            var $this = $(this);
+            $this.data('before', $this.html());
+            return $this;
+        }).on('blur keyup paste', function() {
+            var $this = $(this);
+            if ($this.data('before') !== $this.html()) {
+                $this.data('before', $this.html());
+                $this.trigger('change');
+            }
+            return $this;
+      });
+
       fastBrowsing = function (e) {
         e.preventDefault();
         window.location.href = "/search?q=" + encodeURIComponent(
@@ -80,6 +93,10 @@ small:not(.ccat), font[color=red]:not(.ccat) {
       }
 
       editDataSend = function () {};
+
+      $(".entry-field").change(function () {
+        console.log($(this).find("input[type=hidden]").val());
+      });
 
       $(".prefix-browse").click(fastBrowsing);
       $("#search-prefix").keypress(function (e) {
