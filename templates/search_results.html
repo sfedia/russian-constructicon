@@ -66,6 +66,15 @@ small:not(.ccat), font[color=red]:not(.ccat) {
         );
       };
 
+      editMode = function () {
+        ls = window.localStorage;
+        if (ls.getItem("editUN") === null) {
+            ls.setItem("editUN", prompt("User name:", "basic1"));
+            ls.setItem("editPWD", prompt("Key phrase:"));
+        }
+        $(".entry-field").attr("contenteditable", true);
+      };
+
       $(".prefix-browse").click(fastBrowsing);
       $("#search-prefix").keypress(function (e) {
         if (e.which === 13)
@@ -134,7 +143,7 @@ small:not(.ccat), font[color=red]:not(.ccat) {
 		<h2 class="lead">
             <strong class="text-danger">{{count}}</strong> entries were found&nbsp;
             <a href="/"><i class="glyphicon glyphicon-home"></i></a>
-            <a href="/"><i class="glyphicon glyphicon-pencil"></i></a>
+            <a href="#" onclick="editMode()"><i class="glyphicon glyphicon-pencil"></i></a>
             <a href="/"><i class="glyphicon glyphicon-floppy-save"></i></a>
         </h2>
 	</hgroup>
@@ -154,7 +163,7 @@ small:not(.ccat), font[color=red]:not(.ccat) {
 					<!--<li><i class="glyphicon glyphicon-user"></i> <span>{{entry_item['cefr']}}</span></li>-->
 				</ul>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+			<div class="col-xs-12 col-sm-12 col-md-7 excerpet entry-field">
 				<h3><a href="#" title="">{{entry_item['name']}}</a></h3>
                 <h4>
                     <a href="#" title="">{{entry_item['illustration']}}</a>
