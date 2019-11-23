@@ -86,10 +86,12 @@ small:not(.ccat), font[color=red]:not(.ccat) {
             ls.setItem("editPWD", prompt("Key phrase:"));
         }
         $(".entry-field").attr("contenteditable", true);
+        $(".entry-save").toggle();
       };
 
       editModeDisable = function () {
         $(".entry-field").removeAttr("contenteditable");
+        $(".entry-save").toggle();
       }
 
       editDataSend = function () {};
@@ -168,7 +170,6 @@ small:not(.ccat), font[color=red]:not(.ccat) {
             <a href="/"><i class="glyphicon glyphicon-home"></i></a>
             <a href="#" onclick="editMode()"><i class="glyphicon glyphicon-pencil"></i></a>
             <a href="#" onclick="editModeDisable()"><i class="glyphicon glyphicon-remove-circle"></i></a>
-            <a href="#" onclick="editDataSend()"><i class="glyphicon glyphicon-floppy-save"></i></a>
         </h2>
 	</hgroup>
 
@@ -189,7 +190,12 @@ small:not(.ccat), font[color=red]:not(.ccat) {
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-7 excerpet entry-field">
                 <input type="hidden" class="__field__id" value="{{entry_item['ID']}}">
-				<h3><a href="#" title="" class="__field__name">{{entry_item['name']}}</a></h3>
+				<h3>
+                    <a href="#" title="" class="__field__name">{{entry_item['name']}}</a>
+                    <a href="#" onclick="editDataSend()" class="entry-save">
+                        <i class="glyphicon glyphicon-floppy-save"></i>
+                    </a>
+                </h3>
                 <h4>
                     <a href="#" title="" class="__field__illustration">{{entry_item['illustration']}}</a>
                     <i class="glyphicon glyphicon-user __field__cefr"></i> <span>{{entry_item['cefr']}}</span>
