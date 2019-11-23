@@ -75,6 +75,12 @@ small:not(.ccat), font[color=red]:not(.ccat) {
         $(".entry-field").attr("contenteditable", true);
       };
 
+      editModeDisable = function () {
+        $(".entry-field").removeAttr("contenteditable");
+      }
+
+      editDataSend = function () {};
+
       $(".prefix-browse").click(fastBrowsing);
       $("#search-prefix").keypress(function (e) {
         if (e.which === 13)
@@ -144,7 +150,8 @@ small:not(.ccat), font[color=red]:not(.ccat) {
             <strong class="text-danger">{{count}}</strong> entries were found&nbsp;
             <a href="/"><i class="glyphicon glyphicon-home"></i></a>
             <a href="#" onclick="editMode()"><i class="glyphicon glyphicon-pencil"></i></a>
-            <a href="/"><i class="glyphicon glyphicon-floppy-save"></i></a>
+            <a href="#" onclick="editModeDisable()"><i class="glyphicon glyphicon-remove-circle"></i></a>
+            <a href="#" onclick="editDataSend()"><i class="glyphicon glyphicon-floppy-save"></i></a>
         </h2>
 	</hgroup>
 
