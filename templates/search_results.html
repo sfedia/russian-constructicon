@@ -58,7 +58,8 @@ small:not(.ccat), font[color=red]:not(.ccat) {
 
 <script>
     $(function () {
-
+    
+      $(".entry-save").toggle();
       $('[contenteditable]').on('focus', function() {
             var $this = $(this);
             $this.data('before', $this.html());
