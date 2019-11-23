@@ -171,21 +171,21 @@ small:not(.ccat), font[color=red]:not(.ccat) {
 				</ul>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-7 excerpet entry-field">
-				<h3><a href="#" title="">{{entry_item['name']}}</a></h3>
+				<h3><a href="#" title="" class="__field__name">{{entry_item['name']}}</a></h3>
                 <h4>
-                    <a href="#" title="">{{entry_item['illustration']}}</a>
-                    <i class="glyphicon glyphicon-user"></i> <span>{{entry_item['cefr']}}</span>
+                    <a href="#" title="" class="__field__illustration">{{entry_item['illustration']}}</a>
+                    <i class="glyphicon glyphicon-user __field__cefr"></i> <span>{{entry_item['cefr']}}</span>
                 </h4>
                 <table class="table">
                   <tbody>
                     <tr>
                       <td class="item-role definition">DEFINITION</td>
-                      <td>{{entry_item['definition']}}</td>
+                      <td class="__field__definition">{{entry_item['definition']}}</td>
                     </tr>
                     {% for example_ in entry_item['examples'] %}
                     <tr>
                       <td class="item-role example">EXAMPLE</td>
-                      <td>{{example_['sentence']}}</td>
+                      <td class="__field__example">{{example_['sentence']}}</td>
                       <!--<td class="example-name">{{example_['name']}}</td>-->
                     </tr>
                     {% endfor %}

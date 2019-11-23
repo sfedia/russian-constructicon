@@ -118,7 +118,8 @@ def browser_search():
         entry_dict["definition"] = karp_example2html(tag.xpath("Sense/definition")[0])
         entry_dict["content_cats"] = karp_example2cats(tag.xpath("Sense/definition")[0])
         entry_dict["content_cats"] = Markup(",&nbsp;".join([
-            '<a href="{1}"><font color="red" class="ccat"><small class="ccat">{0}</small></font></a>'.format(
+            '<a href="{1}" class="__field__ccat"><font color="red" class="ccat"><small class="ccat">{0}</small>"' +
+            '</font></a>'.format(
                 cat, '/search?q=%s' % urllib.parse.quote('{"sem_search":["%s"]}' % cat)
             )
             for cat in set(entry_dict["content_cats"])
