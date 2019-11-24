@@ -92,7 +92,7 @@ small:not(.ccat), font[color=red]:not(.ccat) {
 
       editModeDisable = function () {
         $(".entry-field").removeAttr("contenteditable");
-        setTimeout($(".entry-save").toggle, 15 * 1000);
+        setTimeout(function () { $(".entry-save").toggle() } , 15 * 1000);
       }
 
       editDataSend = function () {};
