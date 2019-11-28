@@ -8,7 +8,7 @@ import math
 import re
 import urllib.parse
 
-browser = konstruktikon_browser.Browser("konstruktikon.xml")
+browser = konstruktikon_browser.Browser("konstruktikon2.xml")
 app = Flask(__name__)
 
 
