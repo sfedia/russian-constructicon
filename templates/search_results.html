@@ -214,6 +214,14 @@ small:not(.ccat), font[color=red]:not(.ccat) {
                       <!--<td class="example-name">{{example_['name']}}</td>-->
                     </tr>
                     {% endfor %}
+                    <tr>
+                      <td class="item-role semantics">SEMANTICS</td>
+                      <td class="__field__semantics">{{entry_item['semantics']}}</td>
+                    </tr>
+                    <tr>
+                      <td class="item-role syntax">SYNTAX</td>
+                      <td class="__field__syntax">{{entry_item['syntax']}}</td>
+                    </tr>
                   </tbody>
                 </table>
                 {{entry_item['content_cats']}}

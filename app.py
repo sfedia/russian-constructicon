@@ -127,6 +127,41 @@ def browser_search():
             if not re.search(r'[А-Яа-я]', cat)
         ]))
 
+        entry_dict["semantics"] = ""
+        sem1, sem12, sem2, sem22 = [
+            tag.xpath("Sense/feat[@att='%s']" % st) for st in ["SemType1", "SemSubType1", "SemType2", "SemSubType2"]
+        ]
+        synt_el = tag.xpath("Sense/feat[@att='Syntax']")[0]
+        if sem1.attrib["val"]:
+            entry_dict["semantics"] += ('<a href="{1}" class="__field__ccat"><font color="red" class="ccat">' +
+            '<small class="ccat">{0}</small></font></a>').format(
+                sem1.attrib["val"], "/search?q=%s" % urllib.parse.quote('{"sem_search":["%s"]}' % sem1.attrib["val"])
+            )
+        if sem12.attrib["val"]:
+            entry_dict["semantics"] += ('&nbsp;(<a href="{1}" class="__field__ccat"><font color="red" class="ccat">' +
+                                        '<small class="ccat">{0}</small></font></a>)').format(
+                sem12.attrib["val"], "/search?q=%s" % urllib.parse.quote('{"sem_search":["%s"]}' % sem12.attrib["val"])
+            )
+        if sem2.attrib["val"]:
+            entry_dict["semantics"] += ('<a href="{1}" class="__field__ccat"><font color="red" class="ccat">' +
+            '<small class="ccat">{0}</small></font></a>').format(
+                sem2.attrib["val"], "/search?q=%s" % urllib.parse.quote('{"sem_search":["%s"]}' % sem2.attrib["val"])
+            )
+        if sem22.attrib["val"]:
+            entry_dict["semantics"] += ('&nbsp;(<a href="{1}" class="__field__ccat"><font color="red" class="ccat">' +
+                                        '<small class="ccat">{0}</small></font></a>)').format(
+                sem22.attrib["val"], "/search?q=%s" % urllib.parse.quote('{"sem_search":["%s"]}' % sem22.attrib["val"])
+            )
+        entry_dict["semantics"] = Markup(entry_dict["semantics"])
+
+        entry_dict["syntax"] = Markup(",&nbsp;".join([
+            ('<a href="{1}" class="__field__ccat"><font color="red" class="ccat"><small class="ccat">{0}</small>' +
+             '</font></a>').format(
+                cat, '/search?q=%s' % urllib.parse.quote('{"synt_search":["%s"]}' % cat)
+            )
+            for cat in set(synt_el.attrib["val"].split(","))
+        ]))
+
         karp = dict(namespaces={
             "karp": "http://spraakbanken.gu.se/eng/research/infrastructure/karp/karp"
         })
