@@ -129,7 +129,7 @@ def browser_search():
 
         entry_dict["semantics"] = ""
         sem1, sem12, sem2, sem22 = [
-            tag.xpath("Sense/feat[@att='%s']" % st) for st in ["SemType1", "SemSubType1", "SemType2", "SemSubType2"]
+            tag.xpath("Sense/feat[@att='%s']" % st)[0] for st in ["SemType1", "SemSubType1", "SemType2", "SemSubType2"]
         ]
         synt_el = tag.xpath("Sense/feat[@att='Syntax']")[0]
         if sem1.attrib["val"]:
@@ -143,7 +143,7 @@ def browser_search():
                 sem12.attrib["val"], "/search?q=%s" % urllib.parse.quote('{"sem_search":["%s"]}' % sem12.attrib["val"])
             )
         if sem2.attrib["val"]:
-            entry_dict["semantics"] += ('<a href="{1}" class="__field__ccat"><font color="red" class="ccat">' +
+            entry_dict["semantics"] += (',&nbsp;<a href="{1}" class="__field__ccat"><font color="red" class="ccat">' +
             '<small class="ccat">{0}</small></font></a>').format(
                 sem2.attrib["val"], "/search?q=%s" % urllib.parse.quote('{"sem_search":["%s"]}' % sem2.attrib["val"])
             )
