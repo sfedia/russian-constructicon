@@ -239,7 +239,7 @@ main div.container {
                 <tbody id="myTable">
                     {% for el in base %}
                     <tr>
- 	                <td>{{ el }}</td>
+                        <td><a href='https://russian-constructicon.herokuapp.com/search?q={"prefix":{el}}'>{{ el }}</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
