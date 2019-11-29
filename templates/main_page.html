@@ -188,7 +188,8 @@ main div.container {
 <div class="col-lg-8 col-lg-offset-2">
     <ul class="nav nav-tabs">
         <!--<li><a data-toggle="tab" href="#panel1">Search word(s)</a></li>-->
-        <li class="active"><a data-toggle="tab" href="#panel2">Content categories</a></li>
+        <li class="active"><a data-toggle="tab" href="#panel6">Table</a></li>
+        <li><a data-toggle="tab" href="#panel2">Content categories</a></li>
         <li><a data-toggle="tab" href="#panel4">Gr. categories</a></li>
         <li><a data-toggle="tab" href="#panel3">CEFR Level</a></li>
         <li><a href="#" class="daily-dose">Daily dose</a></li>
@@ -212,9 +213,21 @@ main div.container {
         </p>
       </div>
       <div id="panel5" class="tab-pane fade">
-          &nbsp;
       </div>
-      <div id="panel2" class="tab-pane fade in active">
+      <div id="panel6" class="tab-pane fade in active">
+        <h3>All constructions</h3>
+          <p>Здесь можно искать конструкции по любой подстроке и переходить на страницу индивидуальной конструкции</p>
+            <div class="container">
+            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+            <br>
+            <table class="table">
+                <thead><tr>
+                    <th>Expression</th>
+                </tr></thead>
+            </table>
+            </div>
+      </div>
+      <div id="panel2" class="tab-pane fade">
         <h3>Semantic roles</h3>
         <p>
             <div class="form-group semantic-roles">
