@@ -14,7 +14,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return render_template("main_page.html")
+    phrases = browser.lex.xpath("//LexicalEntry")
+    constructions = [le.xpath('Sense')[0].attrib["id"].replace("konstruktikon-rus--", "").replace("_", " ") for le in phrases]
+    return render_template("main_page.html", base=constructions)
 
 
 def karp_example2html(example_tag):
