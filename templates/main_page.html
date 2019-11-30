@@ -110,6 +110,22 @@ main div.container {
         if (searchQuery.sem_search.length === 0)
             delete searchQuery.sem_search;
 
+        searchQuery.sem_search2 = [];
+        $(".semantics ul li div label input[type=checkbox]").each(function (num, el) {
+            if (el.checked)
+                searchQuery.sem_search2.push(el.value);
+        });
+        if (searchQuery.sem_search.length === 0)
+            delete searchQuery.sem_search2;
+
+        searchQuery.synt_search = [];
+        $(".syntax ul li div label input[type=checkbox]").each(function (num, el) {
+            if (el.checked)
+                searchQuery.synt_search.push(el.value);
+        });
+        if (searchQuery.sem_search.length === 0)
+            delete searchQuery.sem_search2;
+
         searchQuery.gram_search = [];
         $(".gram-search ul li div label input[type=checkbox]").each(function (num, el) {
             if (el.checked)
