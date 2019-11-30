@@ -123,8 +123,8 @@ main div.container {
             if (el.checked)
                 searchQuery.synt_search.push(el.value);
         });
-        if (searchQuery.sem_search.length === 0)
-            delete searchQuery.sem_search2;
+        if (searchQuery.synt_search.length === 0)
+            delete searchQuery.synt_search;
 
         searchQuery.gram_search = [];
         $(".gram-search ul li div label input[type=checkbox]").each(function (num, el) {
