@@ -104,6 +104,8 @@ class LexicalEntry:
                 ("structure" in filter_dict and self.structure_contains(filter_dict["structure"])) or
                 ("prefix" not in filter_dict and
                     "sem_search" not in filter_dict
+                    and "sem_search2" not in filter_dict
+                    and "synt_search" not in filter_dict
                     and "gram_search" not in filter_dict
                     and "structure" not in filter_dict
                  )
