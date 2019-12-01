@@ -161,7 +161,7 @@ class LexicalEntry:
 
     def sem_search2(self, ftr):
         try:
-            sem_tags = self.entry_tag.xpath("feat[att*=Sem]")
+            sem_tags = self.entry_tag.xpath("feat[@att*='Sem']")
             for tag in sem_tags:
                 if tag.attrib["val"] in ftr:
                     return True
@@ -172,7 +172,7 @@ class LexicalEntry:
 
     def synt_search(self, ftr):
         try:
-            synt_tags = self.entry_tag.xpath("feat[att=Syntax]")
+            synt_tags = self.entry_tag.xpath("feat[@att='Syntax']")
             for tag in synt_tags:
                 if tag.attrib["val"] in ftr:
                     return True
