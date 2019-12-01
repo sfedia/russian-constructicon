@@ -98,6 +98,8 @@ class LexicalEntry:
         return (
                 ("prefix" in filter_dict and self.name_prefix(filter_dict["prefix"])) or
                 ("sem_search" in filter_dict and self.toksem_and_filsem(filter_dict["sem_search"])) or
+                ("sem_search2" in filter_dict and self.sem_search2(filter_dict["sem_search2"])) or
+                ("synt_search" in filter_dict and self.synt_search(filter_dict["synt_search"])) or
                 ("gram_search" in filter_dict and self.gram_search(filter_dict["gram_search"])) or
                 ("structure" in filter_dict and self.structure_contains(filter_dict["structure"])) or
                 ("prefix" not in filter_dict and
@@ -154,6 +156,28 @@ class LexicalEntry:
         for karp_tag in first_def.xpath("*"):
             if "name" in karp_tag.attrib and karp_tag.attrib["name"].strip("., ") in filsem:
                 return True
+
+        return False
+
+    def sem_search2(self, ftr):
+        try:
+            sem_tags = self.entry_tag.xpath("feat[att*=Sem]")
+            for tag in sem_tags:
+                if tag.attrib["val"] in ftr:
+                    return True
+        except IndexError:
+            return False
+
+        return False
+
+    def synt_search(self, ftr):
+        try:
+            synt_tags = self.entry_tag.xpath("feat[att=Syntax]")
+            for tag in synt_tags:
+                if tag.attrib["val"] in ftr:
+                    return True
+        except IndexError:
+            return False
 
         return False
 
