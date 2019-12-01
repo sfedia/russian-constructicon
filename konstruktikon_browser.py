@@ -165,6 +165,7 @@ class LexicalEntry:
         try:
             sem_tags = self.entry_tag.xpath("feat[contains(@att,'Sem')]")
             for tag in sem_tags:
+                print(tag.attrib["val"])
                 if tag.attrib["val"] in ftr:
                     return True
         except IndexError:
