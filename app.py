@@ -18,6 +18,12 @@ def hello_world():
     constructions = [le.xpath('Sense')[0].attrib["id"].replace("konstruktikon-rus--", "").replace("_", " ") for le in phrases]
     return render_template("main_page.html", base=constructions)
 
+@app.route('/instruction')
+def instruction():
+    # Надо прописать путь к файлу на сервере правильно
+    return send_file(r"D:\MyDocuments\кванторы_проект\russian-constructicon\russian-constructicon\static\semantic_tags.pdf",
+                     attachment_filename='instructions.pdf',
+                     as_attachment=True)
 
 def karp_example2html(example_tag):
     inner_html = etree.tostring(example_tag, pretty_print=True, encoding="unicode")
