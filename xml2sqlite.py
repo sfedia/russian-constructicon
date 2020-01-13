@@ -6,6 +6,33 @@ import sqlite3
 from konstruktikon_browser import *
 
 
+class SQLAgent:
+    def __init__(self, sqlite_filename="newBase.sqlite3"):
+        self.sqlite_filename = sqlite_filename
+        self.connector = sqlite3.connect(self.sqlite_filename)
+        self.cursor = self.connector.cursor()
+
+    """konstruktikon_xml (entry_id text, field_type text, field_content text)"""
+
+    def add_fields(self, fields, rewrite=False):
+        for arg1 in fields:
+            self.add_field(arg1, rewrite)
+
+    def add_field(self, field_in_list, rewrite=False):
+        entry_id, field_type, field_content = field_in_list
+        if rewrite:
+            self.cursor.execute(
+                "DELETE FROM konstruktikon_xml WHERE entry_id='%s' AND field_type='%s'" % (entry_id, field_type,))
+
+        self.cursor.execute("INSERT INTO konstruktikon_xml VALUES (?, ?, ?)", field_in_list)
+
+        return True
+
+    def stop_session(self):
+        self.connector.commit()
+        self.connector.close()
+
+
 class SQLiteFieldsFrom:
     def __init__(self, lexical_entry):
         self.entry_ = lexical_entry
@@ -215,9 +242,14 @@ class SQLiteFieldsFrom:
 
 konst2 = Browser("konstruktikon2.xml")
 lex = konst2.lex
+agent = SQLAgent()
 sqlt_bases = []
+lengths = []
 
-for entry in lex.xpath("//LexicalEntry"):
-    print(entry)
+print(len(lex.xpath("//LexicalEntry")))
+for j, entry in enumerate(lex.xpath("//LexicalEntry")):
     q = SQLiteFieldsFrom(entry)
+    agent.add_fields(q.build_fields())
     print(q.build_fields())
+
+agent.stop_session()
