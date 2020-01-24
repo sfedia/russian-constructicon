@@ -197,5 +197,12 @@ def browser_search():
     )
 
 
+@app.route("/entry_edit")
+def entry_edit():
+    return render_template(
+        "entry_edit.html"
+    )
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
