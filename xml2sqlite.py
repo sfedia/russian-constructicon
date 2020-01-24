@@ -81,6 +81,11 @@ class SQLiteFieldsFrom:
             self.my_fields.append(
                 [self.sense_id, "Structures", self.py2sqlt(self.structures)]
             )
+        for (level, value) in self.sem_types:
+            if value:
+                self.my_fields.append(
+                    [self.sense_id, "Sem" + ("Sub" if level[1] > 1 else "") + "Type" + str(level[0])]
+                )
 
         return self.my_fields
 
@@ -102,6 +107,15 @@ class SQLiteFieldsFrom:
             return self.entry_.xpath("Sense")[0].attrib["id"]
         except IndexError:
             return None
+
+    @property
+    def sem_types(self):
+        return [
+            ((1, 0), self.caught_feat("SemType1")),
+            ((1, 1), self.caught_feat("SemSubType1")),
+            ((2, 0), self.caught_feat("SemType2")),
+            ((2, 1), self.caught_feat("SemSubType2"))
+        ]
 
     def caught_feat(self, att, from_=None):
         from_ = from_ if from_ else self.entry
