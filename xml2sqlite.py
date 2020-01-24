@@ -19,6 +19,7 @@ class SQLAgent:
             self.add_field(arg1, rewrite)
 
     def add_field(self, field_in_list, rewrite=False):
+        print(field_in_list)
         entry_id, field_type, field_content = field_in_list
         if rewrite:
             self.cursor.execute(
@@ -84,7 +85,8 @@ class SQLiteFieldsFrom:
         for (level, value) in self.sem_types:
             if value:
                 self.my_fields.append(
-                    [self.sense_id, "Sem" + ("Sub" if level[1] > 1 else "") + "Type" + str(level[0])]
+                    [self.sense_id, "Sem" + ("Sub" if level[1] > 1 else "") + "Type" + str(level[0]),
+                     value]
                 )
 
         return self.my_fields
