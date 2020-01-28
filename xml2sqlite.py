@@ -66,6 +66,10 @@ class SQLiteFieldsFrom:
             self.my_fields.append(
                 [self.sense_id, "examples", self.py2sqlt(self.examples_json)]
             )
+        if self.syntax:
+            self.my_fields.append(
+                [self.sense_id, "syntax", self.py2sqlt(self.syntax)]
+            )
         if self.illustration:
             self.my_fields.append(
                 [self.sense_id, "illustration", self.illustration]
@@ -246,6 +250,13 @@ class SQLiteFieldsFrom:
     @property
     def _type_(self):
         return self.caught_feat("type")
+
+    @property
+    def syntax(self):
+        res = self.caught_feat("Syntax")
+        if not res:
+            return res
+        return res.split(",")
 
     @property
     def cee(self):
