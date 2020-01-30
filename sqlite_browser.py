@@ -65,6 +65,24 @@ class BaseBrowser(SQLAgent):
                 )
             )
 
+        cefr_query_pre = ("(SELECT entry_id FROM konstruktikon_xml WHERE entry_id in {select_queries} " +
+            "AND field_type='cefr' AND " + self.generate_or_group("field_content", filter_dict["cefr"])) \
+            if "cefr" in filter_dict else "{select_queries}"
+        cefr_query_post = ")" if "cefr" in filter_dict else ""
+
+        language_query_pre = ("(SELECT entry_id FROM konstruktikon_xml WHERE entry_id in {cefr_qs}" +
+            "AND field_type='language' AND " + self.generate_or_group("field_content", filter_dict["language"])) \
+            if "language" in filter_dict else "{select_queries}"
+        language_query_post = ")" if "language" in filter_dict else ""
+
+        db_query = "{lang1}{cefr1}{sel}{cefr2}{lang2}".format(
+            lang1=language_query_pre, lang2=language_query_post,
+            cefr1=cefr_query_pre, cefr2=cefr_query_post,
+            sel="(%s)" % (" UNION ".join("(%s)" % q for q in select_queries))
+        )
+
+        return db_query
+
     lambda_str_equal = lambda v: "field_content='%s'" % escape_q(v)
     lambda_str_contains = lambda v: "'%s' in field_content" % escape_q(v)
     lambda_json_query = lambda q: q
