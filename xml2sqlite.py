@@ -267,16 +267,17 @@ class SQLiteFieldsFrom:
         return self.caught_multi_feat("structure")
 
 
-konst2 = Browser("konstruktikon2.xml")
-lex = konst2.lex
-agent = SQLAgent()
-sqlt_bases = []
-lengths = []
+if __name__ == "__main__":
+    konst2 = Browser("konstruktikon2.xml")
+    lex = konst2.lex
+    agent = SQLAgent()
+    sqlt_bases = []
+    lengths = []
+    
+    print(len(lex.xpath("//LexicalEntry")))
+    for j, entry in enumerate(lex.xpath("//LexicalEntry")):
+        q = SQLiteFieldsFrom(entry)
+        agent.add_fields(q.build_fields())
+        print(q.build_fields())
 
-print(len(lex.xpath("//LexicalEntry")))
-for j, entry in enumerate(lex.xpath("//LexicalEntry")):
-    q = SQLiteFieldsFrom(entry)
-    agent.add_fields(q.build_fields())
-    print(q.build_fields())
-
-agent.stop_session()
+    agent.stop_session()
