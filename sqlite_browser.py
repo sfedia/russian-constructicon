@@ -56,7 +56,7 @@ class BaseBrowser(SQLAgent):
             select_queries.append(
                 "SELECT entry_id FROM konstruktikon_xml, json_tree(konstruktikon_xml.field_content) " +
                 "WHERE json_valid(field_content) AND field_type='syntax' AND " +
-                self.generate_or_group("field_content", filter_dict["syntax"])
+                self.generate_or_group("value", filter_dict["syntax"])
             )
         if "gram_search" in filter_dict:
             select_queries.append(
@@ -67,20 +67,27 @@ class BaseBrowser(SQLAgent):
 
         cefr_query_pre = ("(SELECT entry_id FROM konstruktikon_xml WHERE entry_id in {select_queries} " +
             "AND field_type='cefr' AND " + self.generate_or_group("field_content", filter_dict["cefr"])) \
-            if "cefr" in filter_dict else "{select_queries}"
-        cefr_query_post = ")" if "cefr" in filter_dict else ""
+            if "cefr" in filter_dict else "(SELECT entry_id FROM "
+        cefr_query_post = ")"
 
         language_query_pre = ("(SELECT entry_id FROM konstruktikon_xml WHERE entry_id in {cefr_qs}" +
-            "AND field_type='language' AND " + self.generate_or_group("field_content", filter_dict["language"])) \
-            if "language" in filter_dict else "{select_queries}"
-        language_query_post = ")" if "language" in filter_dict else ""
+            " AND field_type='language' AND " + self.generate_or_group("field_content", filter_dict["language"])) \
+            if "language" in filter_dict else "(SELECT entry_id FROM {cefr_qs}"
+        language_query_post = ")"
 
-        db_query = "{lang1}{cefr1}{sel}{cefr2}{lang2}".format(
-            lang1=language_query_pre, lang2=language_query_post,
-            cefr1=cefr_query_pre, cefr2=cefr_query_post,
-            sel="(%s)" % (" UNION ".join("(%s)" % q for q in select_queries))
-        )
+        if "cefr" in filter_dict or "language" in filter_dict:
+            db_query = "{lang1}{lang2}".format(
+                lang1=language_query_pre, lang2=language_query_post
+            ).format(
+                cefr_qs=cefr_query_pre + cefr_query_post
+            ).format(
+                select_queries="(%s)" % (" UNION ".join("(%s)" % q for q in select_queries))
+            )
+        else:
+            db_query = " UNION ".join("(%s)" % q if len(select_queries) > 1 else q for q in select_queries)
 
+        if db_query.startswith("(") and db_query.endswith(")"):
+            db_query = db_query[1:-1]
         return db_query
 
     lambda_str_equal = lambda v: "field_content='%s'" % escape_q(v)
