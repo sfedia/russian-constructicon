@@ -32,7 +32,7 @@ class BaseBrowser(SQLAgent):
     def generate_or_group(param, values):
         return "(" + " OR ".join(["%s='%s'" % (param, vn) for vn in values]) + ")"
 
-    def generate_filter(self, filter_dict):
+    def generate_filter(self, filter_dict, limit=None, offset=None):
         select_queries = []
         if "substring" in filter_dict:
             select_queries.append(
@@ -93,6 +93,14 @@ class BaseBrowser(SQLAgent):
 
         if db_query.startswith("(") and db_query.endswith(")"):
             db_query = db_query[1:-1]
+
+        if limit or offset:
+            db_query += " LIMIT "
+        if offset:
+            db_query += "%d," % offset
+        if limit:
+            db_query += str(limit)
+
         return db_query
 
     lambda_str_equal = lambda v: "field_content='%s'" % escape_q(v)
