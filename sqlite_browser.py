@@ -65,14 +65,16 @@ class BaseBrowser(SQLAgent):
                 )
             )
 
-        cefr_query_pre = ("(SELECT entry_id FROM konstruktikon_xml WHERE entry_id in {select_queries} " +
-            "AND field_type='cefr' AND " + self.generate_or_group("field_content", filter_dict["cefr"])) \
-            if "cefr" in filter_dict else "(SELECT entry_id FROM "
+        cefr_query_pre = ("(SELECT entry_id FROM konstruktikon_xml " +
+            "WHERE entry_id in {select_queries} AND field_type='cefr' AND " +
+            self.generate_or_group("field_content", filter_dict["cefr"])) \
+            if "cefr" in filter_dict else "(SELECT entry_id FROM konstruktikon_xml WHERE entry_id IN "
         cefr_query_post = ")"
 
-        language_query_pre = ("(SELECT entry_id FROM konstruktikon_xml WHERE entry_id in {cefr_qs}" +
+        language_query_pre = ("(SELECT DISTINCT entry_id FROM konstruktikon_xml WHERE entry_id in {cefr_qs}" +
             " AND field_type='language' AND " + self.generate_or_group("field_content", filter_dict["language"])) \
-            if "language" in filter_dict else "(SELECT entry_id FROM {cefr_qs}"
+            if "language" in filter_dict else \
+            "(SELECT DISTINCT entry_id FROM konstruktikon_xml WHERE entry_id IN {cefr_qs}"
         language_query_post = ")"
 
         if "cefr" in filter_dict or "language" in filter_dict:
@@ -81,7 +83,10 @@ class BaseBrowser(SQLAgent):
             ).format(
                 cefr_qs=cefr_query_pre + cefr_query_post
             ).format(
-                select_queries="(%s)" % (" UNION ".join("(%s)" % q for q in select_queries))
+                select_queries="(%s)" % (" UNION ".join(
+                        "(%s)" % q if len(select_queries) > 1 else q for q in select_queries
+                    )
+                )
             )
         else:
             db_query = " UNION ".join("(%s)" % q if len(select_queries) > 1 else q for q in select_queries)
