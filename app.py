@@ -240,7 +240,7 @@ def entry_edit():
     _options = []
     for typ in types2add:
         _options.append(etree.SubElement(add_interface[0], "option", attrib=dict(value=typ)))
-        _options.text = typ
+        _options[-1].text = typ
 
     return etree.tostring(body)
 
