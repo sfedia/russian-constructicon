@@ -205,10 +205,28 @@ def entry_edit():
 
     browser = sqlite_browser.BaseBrowser()
     this = browser.get_entries("'%s'" % request.args["_id"])
-
+    data = [list(g) for (k, g) in this][0]
+    data = [{x[1]: x[2]} for x in data]
     browser.stop_session()
 
-    return json.dumps([list(g) for (k, g) in this][0])
+    table = etree.Element("table")
+
+    tr1 = etree.SubElement(table, "tr")
+
+    prop = etree.SubElement(tr1, "th")
+    prop.text = "Property"
+    val = etree.SubElement(tr1, "th")
+    val.text = "Value"
+    items = []
+
+    for (p, v) in data.items():
+        items.append(etree.SubElement(table, "tr"))
+        items.append(etree.SubElement(items[-1], "td"))
+        items[-1].text = p
+        items.append(etree.SubElement(items[-1], "td"))
+        items[-1].text = v
+
+    return etree.tostring(table)
 
 
 if __name__ == "__main__":
