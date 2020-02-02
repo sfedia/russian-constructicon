@@ -37,7 +37,8 @@ class SQLAgent:
         self.connector.close()
 
     def get_entries(self, selector):
-        results = self.cursor.execute(selector).fetchall()
+        u_selector = "SELECT * FROM konstruktikon_xml WHERE entry_id IN (%s)" % selector
+        results = self.cursor.execute(u_selector).fetchall()
         return itertools.groupby(results, key=lambda x: x[0])
 
 
