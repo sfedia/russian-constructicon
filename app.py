@@ -206,7 +206,7 @@ def entry_edit():
     browser = sqlite_browser.BaseBrowser()
     this = browser.get_entries("'%s'" % request.args["_id"])
     data = [list(g) for (k, g) in this][0]
-    data = [{x[1]: x[2]} for x in data]
+    data = [(x[1], x[2]) for x in data]
     browser.stop_session()
 
     table = etree.Element("table")
