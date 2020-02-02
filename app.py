@@ -4,6 +4,7 @@ from flask import Flask, jsonify, Markup, render_template, request, send_file
 from lxml import etree
 import json
 import konstruktikon_browser
+import sqlite_browser
 import math
 import os
 import re
@@ -199,9 +200,15 @@ def browser_search():
 
 @app.route("/entry_edit")
 def entry_edit():
-    return render_template(
-        "entry_edit.html"
-    )
+    if "_id" not in request.args:
+        return "Invalid request"
+
+    browser = sqlite_browser.BaseBrowser()
+    this = browser.get_entries("'%s'" % request.args["_id"])
+
+    browser.stop_session()
+
+    return json.dumps([list(g) for (k, g) in this][0])
 
 
 if __name__ == "__main__":
