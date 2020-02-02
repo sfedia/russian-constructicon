@@ -219,7 +219,7 @@ def entry_edit():
     val.text = "Value"
     items = []
 
-    for (p, v) in data.items():
+    for (p, v) in data:
         items.append(etree.SubElement(table, "tr"))
         items.append(etree.SubElement(items[-1], "td"))
         items[-1].text = p
