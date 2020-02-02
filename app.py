@@ -237,7 +237,10 @@ def entry_edit():
         "examples", "syntax", "illustration", "lastModified",
         "lastModifiedBy", "Structures", "SemType1", "SemType2"
     ]
-    _options = [etree.SubElement(add_interface[0], "option", attrib=dict(value=t)) for t in types2add]
+    _options = []
+    for typ in types2add:
+        _options.append(etree.SubElement(add_interface[0], "option", attrib=dict(value=typ)))
+        _options.text = typ
 
     return etree.tostring(body)
 
