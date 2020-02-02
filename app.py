@@ -209,7 +209,8 @@ def entry_edit():
     data = [(x[1], x[2]) for x in data]
     browser.stop_session()
 
-    table = etree.Element("table")
+    body = etree.Element("body")
+    table = etree.SubElement(body, "table")
 
     tr1 = etree.SubElement(table, "tr")
 
@@ -226,7 +227,20 @@ def entry_edit():
         items.append(etree.SubElement(items[-1], "td"))
         items[-1].text = v
 
-    return etree.tostring(table)
+    add_interface = [
+        etree.SubElement(body, "option"),
+        etree.SubElement(body, "input", attrib=dict(type="text")),
+        etree.SubElement(body, "button", attrib=dict(onclick="addField()"))
+    ]
+    add_interface.append(etree.SubElement(add_interface[0], "select"))
+    types2add = [
+        "language", "cee", "cefr", "definition",
+        "examples", "syntax", "illustration", "lastModified",
+        "lastModifiedBy", "Structures", "SemType1", "SemType2"
+    ]
+    _options = [etree.SubElement(add_interface[-1], "option", attrib=dict(value=t)) for t in types2add]
+
+    return etree.tostring(body)
 
 
 if __name__ == "__main__":
