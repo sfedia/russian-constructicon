@@ -210,7 +210,7 @@ def entry_edit():
     browser.stop_session()
 
     body = etree.Element("body")
-    table = etree.SubElement(body, "table")
+    table = etree.SubElement(body, "table", attrib=dict(contenteditable="true"))
 
     tr1 = etree.SubElement(table, "tr")
 
@@ -234,14 +234,28 @@ def entry_edit():
     ]
     add_interface[-1].text = "Add field"
     types2add = [
-        "language", "cee", "cefr", "definition",
-        "examples", "syntax", "illustration", "lastModified",
+        "language", "cee", "cefr", "definition.NEW_TEXT",
+        "examples.NEW_TEXT", "syntax", "illustration", "lastModified",
         "lastModifiedBy", "Structures", "SemType1", "SemType2"
     ]
     _options = []
     for typ in types2add:
         _options.append(etree.SubElement(add_interface[0], "option", attrib=dict(value=typ)))
         _options[-1].text = typ
+
+    script = etree.SubElement(body, "script")
+    script.text = """
+    function addField () {
+        item = document.createElement("tr");
+        prop = document.createElement("td");
+        prop.innerHTML = document.querySelector("select").value;
+        item.appendChild(prop);
+        val = document.createElement("td");
+        val.innerHTML = document.querySelector("input[type=text]").value;
+        item.appendChild(val);
+        document.querySelector("table").appendChild(item);
+    }
+    """
 
     return etree.tostring(body)
 
