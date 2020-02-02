@@ -232,6 +232,7 @@ def entry_edit():
         etree.SubElement(body, "input", attrib=dict(type="text")),
         etree.SubElement(body, "button", attrib=dict(onclick="addField()"))
     ]
+    add_interface[-1].text = "Add field"
     types2add = [
         "language", "cee", "cefr", "definition",
         "examples", "syntax", "illustration", "lastModified",
