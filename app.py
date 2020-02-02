@@ -228,17 +228,16 @@ def entry_edit():
         items[-1].text = v
 
     add_interface = [
-        etree.SubElement(body, "option"),
+        etree.SubElement(body, "select"),
         etree.SubElement(body, "input", attrib=dict(type="text")),
         etree.SubElement(body, "button", attrib=dict(onclick="addField()"))
     ]
-    add_interface.append(etree.SubElement(add_interface[0], "select"))
     types2add = [
         "language", "cee", "cefr", "definition",
         "examples", "syntax", "illustration", "lastModified",
         "lastModifiedBy", "Structures", "SemType1", "SemType2"
     ]
-    _options = [etree.SubElement(add_interface[-1], "option", attrib=dict(value=t)) for t in types2add]
+    _options = [etree.SubElement(add_interface[0], "option", attrib=dict(value=t)) for t in types2add]
 
     return etree.tostring(body)
 
