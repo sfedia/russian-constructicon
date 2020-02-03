@@ -1,15 +1,16 @@
 #!/usr/bin/python3
 
 from flask import Flask, jsonify, Markup, render_template, request, send_file
-import html
 from lxml import etree
 from lxml.html import fromstring
+import html
 import json
 import konstruktikon_browser
-import sqlite_browser
+import login
 import math
 import os
 import re
+import sqlite_browser
 import urllib.parse
 
 browser = konstruktikon_browser.Browser("konstruktikon2.xml")
@@ -237,6 +238,12 @@ def entry_repack(data):
             return_data.append((k, v))
 
     return return_data
+
+
+@app.route("/auth", method=["GET", "POST"])
+def auth_func():
+    if "pwd" not in request.forms:
+        return render_template("credentials.html")
 
 
 @app.route("/entry_edit")
