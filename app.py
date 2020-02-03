@@ -209,6 +209,9 @@ def entry_repack(data):
         elif k == "syntax":
             for _el in json.loads(v):
                 return_data.append(("syntax.OBJECT", _el))
+        elif k == "Structures":
+            for _el in json.loads(v):
+                return_data.append(("Structures.OBJECT", _el))
         else:
             return_data.append((k, v))
 
