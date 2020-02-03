@@ -97,7 +97,7 @@ class SQLiteFieldsFrom:
         for (level, value) in self.sem_types:
             if value:
                 self.my_fields.append(
-                    [self.sense_id, "Sem" + ("Sub" if level[1] > 1 else "") + "Type" + str(level[0]),
+                    [self.sense_id, "Sem" + ("Sub" if level[1] > 0 else "") + "Type" + str(level[0]),
                      value]
                 )
 
