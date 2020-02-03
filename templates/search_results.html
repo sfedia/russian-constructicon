@@ -217,8 +217,9 @@ small:not(.ccat), font[color=red]:not(.ccat) {
                 <input type="hidden" class="__field__id" value="{{entry_item['ID']}}">
 				<h3>
                     <a href="#" title="" class="__field__name">{{entry_item['name']}}</a>
-                    <a href="#" onclick="editDataSend()" class="entry-save">
-                        <i class="glyphicon glyphicon-floppy-save"></i>
+                    <a href="/entry_edit?_id={{entry_item['ID']}}"
+                       onclick="window.open(this.href,'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=SomeSize,height=SomeSize'); return false;">
+                        <i class="glyphicon glyphicon-pencil"></i>
                     </a>
                 </h3>
                 <h4>
@@ -274,7 +275,7 @@ small:not(.ccat), font[color=red]:not(.ccat) {
 <footer class="footer mt-auto py-3">
   <div class="foot container text-muted">
     <span>
-        Developed & deployed by <a href="//github.com/prodotiscus/russian-constructicon">Fyodor Sizov</a> (2019),
+        Developed & deployed by <a href="//github.com/prodotiscus/russian-constructicon">Fyodor Sizov</a> (2020),
         <i>f.sizov@yandex.ru</i>
     </span>
   </div>
