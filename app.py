@@ -2,6 +2,7 @@
 
 from flask import Flask, jsonify, Markup, render_template, request, send_file
 from lxml import etree
+from lxml.html import fromstring
 import json
 import konstruktikon_browser
 import sqlite_browser
@@ -234,8 +235,8 @@ def entry_edit():
     ]
     add_interface[-1].text = "Add field"
     types2add = [
-        "ENTRY_ID", "language", "cee", "cefr", "definition.NEW_TEXT",
-        "examples.NEW_TEXT", "syntax", "illustration", "lastModified",
+        "ENTRY_ID", "language", "cee.OBJECT", "cefr", "definition.TEXT",
+        "examples.TEXT", "syntax.OBJECT", "illustration", "lastModified",
         "lastModifiedBy", "Structures", "SemType1", "SemType2"
     ]
     _options = []
@@ -285,7 +286,75 @@ def entry_submit():
     if "table_data" not in request.form or "entry_id" not in request.form:
         return "Invalid request"
 
-    return request.form["table_data"]
+    entry_id = request.form["entry_id"]
+    table = fromstring(request.form["table_data"])
+    table_items = []
+    for n, tr_tag in enumerate(table.cssselect("tr")):
+        if n == 0:
+            continue
+        table_items.append(el.text for el in tr_tag.cssselect("td"))
+
+    agent = sqlite_browser.BaseBrowser()
+    fields = agent.get_entries("'%s'" % entry_id)
+    data = [list(g) for (k, g) in fields][0]
+    flds = {}
+    for x in data:
+        flds[x[1]] = x[2]
+
+    for (key, value) in table_items:
+        if key == "language":
+            agent.add_field([entry_id, "language", value], rewrite=True)
+        if key == "cee.OBJECT":
+            if "cee" in flds:
+                agent.add_field([entry_id, "cee", json.dumps(json.loads(flds["cee"]) + value)], True)
+            else:
+                agent.add_field([entry_id, "cee", json.dumps(value)])
+        if key == "cefr":
+            agent.add_field([entry_id, "cefr", value])
+        if key == "definition.TEXT":
+            agent.add_field([
+                entry_id,
+                "definition",
+                json.dumps(
+                    dict(
+                        definition=dict(
+                            type="InsideDefinition",
+                            cat="text",
+                            content=value,
+                            n="0"
+                        )
+                    )
+                )
+            ], rewrite=True)
+        if key == "examples.TEXT.OBJECT":
+            examples = json.loads(flds["examples"])["examples"]
+            examples.append(
+                dict(
+                    type="SimpleType",
+                    cat="text",
+                    content=value,
+                    n="0"
+                )
+            )
+            agent.add_field([
+                entry_id,
+                "examples",
+                json.dumps(dict(examples=examples))
+            ], rewrite=True)
+        if key == "syntax.OBJECT":
+            agent.add_field([
+                entry_id,
+                "syntax",
+                json.dumps(flds["syntax"] + value)
+            ], rewrite=True)
+        if key == "illustration":
+            agent.add_field([entry_id, "illustration", value], rewrite=True)
+        if key == "Structures":
+            agent.add_field([entry_id, "Structures", value], rewrite=True)
+        if key == "SemType1":
+            agent.add_field([entry_id, "SemType1", value], rewrite=True)
+        if key == "SemType2":
+            agent.add_field([entry_id, "SemType2", value], rewrite=True)
 
 
 if __name__ == "__main__":
