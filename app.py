@@ -200,6 +200,21 @@ def browser_search():
     )
 
 
+def entry_repack(data):
+    return_data = []
+    for (k, v) in data:
+        if k == "cee":
+            for _el in json.loads(v):
+                return_data.append(("cee.ELEMENT", _el))
+        if k == "syntax":
+            for _el in json.loads(v):
+                return_data.append(("syntax.ELEMENT", _el))
+        else:
+            return_data.append((k, v))
+
+    return return_data
+
+
 @app.route("/entry_edit")
 def entry_edit():
     if "_id" not in request.args:
@@ -212,6 +227,9 @@ def entry_edit():
         data = [(x[1], x[2]) for x in data]
     except IndexError:
         data = [("ENTRY_ID", request.args["_id"])]
+
+    data = entry_repack(data)
+
     browser.stop_session()
 
     body = etree.Element("body")
