@@ -396,8 +396,12 @@ def entry_submit():
             agent.add_field([entry_id, "Structures", value], rewrite=True)
         if key == "SemType1":
             agent.add_field([entry_id, "SemType1", value], rewrite=True)
+        if key == "SemSubType1":
+            agent.add_field([entry_id, "SemSubType1", value], rewrite=True)
         if key == "SemType2":
             agent.add_field([entry_id, "SemType2", value], rewrite=True)
+        if key == "SemSubType2":
+            agent.add_field([entry_id, "SemSubType2", value], rewrite=True)
 
     agent.stop_session()
 
