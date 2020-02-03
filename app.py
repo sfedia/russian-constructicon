@@ -282,10 +282,10 @@ def entry_edit():
 
 @app.route("/entry_submit", methods=["POST"])
 def entry_submit():
-    if "table_data" not in request.args or "entry_id" not in request.args:
+    if "table_data" not in request.form or "entry_id" not in request.form:
         return "Invalid request"
 
-    return request.args["table_data"]
+    return request.form["table_data"]
 
 
 if __name__ == "__main__":
