@@ -307,9 +307,9 @@ def entry_submit():
             agent.add_field([entry_id, "language", value], rewrite=True)
         if key == "cee.OBJECT":
             if "cee" in flds:
-                agent.add_field([entry_id, "cee", json.dumps(json.loads(flds["cee"]) + value)], True)
+                agent.add_field([entry_id, "cee", json.dumps(json.loads(flds["cee"]) + [value])], True)
             else:
-                agent.add_field([entry_id, "cee", json.dumps(value)])
+                agent.add_field([entry_id, "cee", json.dumps([value])])
         if key == "cefr":
             agent.add_field([entry_id, "cefr", value])
         if key == "definition.TEXT":
@@ -346,7 +346,7 @@ def entry_submit():
             agent.add_field([
                 entry_id,
                 "syntax",
-                json.dumps(json.loads(flds["syntax"]) + value)
+                json.dumps(json.loads(flds["syntax"]) + [value])
             ], rewrite=True)
         if key == "illustration":
             agent.add_field([entry_id, "illustration", value], rewrite=True)
