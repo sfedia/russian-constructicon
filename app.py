@@ -299,7 +299,7 @@ def entry_submit():
     flds = {}
     fields = agent.get_entries("'%s'" % entry_id)
     for _id, this in fields:
-        for row in this[1]:
+        for row in this:
             flds[row[1]] = row[2]
 
     for (key, value) in table_items:
