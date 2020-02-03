@@ -295,11 +295,11 @@ def entry_submit():
         table_items.append(el.text for el in tr_tag.cssselect("td"))
 
     agent = sqlite_browser.BaseBrowser()
-    fields = agent.get_entries("'%s'" % entry_id)
-    data = [list(g) for (k, g) in fields][0]
     flds = {}
-    for x in data:
-        flds[x[1]] = x[2]
+    fields = agent.get_entries("'%s'" % entry_id)
+    for _id, this in fields:
+        for row in this[1]:
+            flds[row[1]] = row[2]
 
     for (key, value) in table_items:
         if key == "language":
