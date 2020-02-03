@@ -212,6 +212,14 @@ def entry_repack(data):
         elif k == "Structures":
             for _el in json.loads(v):
                 return_data.append(("Structures.OBJECT", _el))
+        elif k == "definition":
+            common_text = ""
+            for part in json.loads(v)["definition"]:
+                if "content" in part and type(part["content"]) == str:
+                    common_text += part["content"]
+            common_text = re.sub(r"\n", " ", common_text)
+            common_text = re.sub(r"\s+", " ", common_text)
+            return_data.append(("definition.TEXT", common_text))
         else:
             return_data.append((k, v))
 
