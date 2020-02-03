@@ -242,7 +242,7 @@ def entry_repack(data):
 
 @app.route("/auth", method=["GET", "POST"])
 def auth_func():
-    if "pwd" not in request.forms:
+    if request.method == "GET" or request.method == "POST" and "pwd" not in request.forms:
         return render_template("credentials.html")
 
 
