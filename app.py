@@ -234,7 +234,7 @@ def entry_edit():
     ]
     add_interface[-1].text = "Add field"
     types2add = [
-        "language", "cee", "cefr", "definition.NEW_TEXT",
+        "ENTRY_ID", "language", "cee", "cefr", "definition.NEW_TEXT",
         "examples.NEW_TEXT", "syntax", "illustration", "lastModified",
         "lastModifiedBy", "Structures", "SemType1", "SemType2"
     ]
@@ -255,7 +255,25 @@ def entry_edit():
         item.appendChild(val);
         document.querySelector("table").appendChild(item);
     }
+    function updateEntry () {
+        post_form = document.createElement("form");
+        post_form.setAttribute("action", "/entry_submit");
+        post_form.setAttribute("method", "POST");
+        table_data = document.createElement("input");
+        table_data.setAttribute("name", "table_data");
+        table_data.setAttribute("value", document.querySelector("table").innerHTML);
+        entry_id = document.createElement("input");
+        entry_id.setAttribute("name", "entry_id");
+        entry_id.setAttribute("value", ENTRY_ID);
+        document.body.appendChild(post_form);
+        document.forms[0].submit();
+    }
     """
+    script.text += "ENTRY_ID = '{_id}'".format(**request.args)
+
+    br = etree.SubElement(body, "br")
+    send = etree.SubElement(body, "button", attrib=dict(onclick="updateEntry()"))
+    send.text = "Update entry"
 
     return etree.tostring(body)
 
