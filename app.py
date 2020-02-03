@@ -220,6 +220,15 @@ def entry_repack(data):
             common_text = re.sub(r"\n", " ", common_text)
             common_text = re.sub(r"\s+", " ", common_text)
             return_data.append(("definition.TEXT", common_text))
+        elif k == "examples":
+            for ex_json in json.loads(v)["examples"]:
+                example_text = ""
+                for part in ex_json:
+                    if "content" in part and type(part["content"]) == str:
+                        example_text += part["content"]
+                example_text = re.sub(r"\n", " ", example_text)
+                example_text = re.sub(r"\s+", " ", example_text)
+                return_data.append(("examples.OBJECT", example_text))
         else:
             return_data.append((k, v))
 
