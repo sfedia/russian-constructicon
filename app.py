@@ -265,6 +265,8 @@ def entry_edit():
         entry_id = document.createElement("input");
         entry_id.setAttribute("name", "entry_id");
         entry_id.setAttribute("value", ENTRY_ID);
+        post_form.appendChild(table_data);
+        post_form.appendChild(entry_id);
         document.body.appendChild(post_form);
         document.forms[0].submit();
     }
