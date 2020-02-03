@@ -207,8 +207,11 @@ def entry_edit():
 
     browser = sqlite_browser.BaseBrowser()
     this = browser.get_entries("'%s'" % request.args["_id"])
-    data = [list(g) for (k, g) in this][0]
-    data = [(x[1], x[2]) for x in data]
+    try:
+        data = [list(g) for (k, g) in this][0]
+        data = [(x[1], x[2]) for x in data]
+    except IndexError:
+        data = [("ENTRY_ID", request.args["_id"])]
     browser.stop_session()
 
     body = etree.Element("body")
