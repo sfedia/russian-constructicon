@@ -346,7 +346,7 @@ def entry_submit():
             agent.add_field([
                 entry_id,
                 "syntax",
-                json.dumps(flds["syntax"] + value)
+                json.dumps(json.loads(flds["syntax"]) + value)
             ], rewrite=True)
         if key == "illustration":
             agent.add_field([entry_id, "illustration", value], rewrite=True)
