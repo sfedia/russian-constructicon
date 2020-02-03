@@ -228,7 +228,7 @@ def entry_repack(data):
                         example_text += part["content"]
                     if "children" in part:
                         for part2 in part["children"]:
-                            if "content" in part and type(part["content"]) == str:
+                            if "content" in part2 and type(part2["content"]) == str:
                                 example_text += " " + part2["content"]
                 example_text = re.sub(r"\n", " ", example_text)
                 example_text = re.sub(r"\s+", " ", example_text)
