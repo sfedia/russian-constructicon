@@ -100,6 +100,19 @@ main div.container {
           fastBrowsing(e);
       });
 
+      addNewConstruction = function (e) {
+        e.preventDefault();
+        window.location.href = "/entry_edit?_id=" + encodeURIComponent(
+          "konstruktikon-rus--" + $("#entry-id--postfix").val().replace(/\s/g, "_")
+        );
+      };
+
+      $(".add-new").click(addNewConstruction);
+      $("#entry-id--postfix").keypress(function (e) {
+        if (e.which === 13)
+          addNewConstruction(e);
+      });
+
       $(".just-browse").click(function (e) {
         var searchQuery = {};
         searchQuery.cefr = [];
@@ -225,7 +238,7 @@ main div.container {
           <div class="form-group">
             <input type="text" class="form-control" id="entry-id--postfix" placeholder="Construction name">
         </div>
-        <button type="button" class="btn btn-default prefix-browse">Add</button>
+        <button type="button" class="btn btn-default add-new">Add</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
           <!--<li><a href="//github.com/ftyers/konstruktikon/blob/master/konstruktikon.xml">
