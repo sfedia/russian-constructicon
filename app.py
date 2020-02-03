@@ -278,5 +278,13 @@ def entry_edit():
     return etree.tostring(body)
 
 
+@app.route("/entry_submit", methods=["POST"])
+def entry_submit():
+    if "table_data" not in request.args or "entry_id" not in request.args:
+        return "Invalid request"
+
+    return request.args["table_data"]
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
