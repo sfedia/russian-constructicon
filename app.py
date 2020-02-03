@@ -273,7 +273,7 @@ def entry_edit():
         document.forms[0].submit();
     }
     """
-    script.text += "ENTRY_ID = '%s'".format(html.unescape(request.args["_id"]))
+    script.text += "ENTRY_ID = '%s'" % (html.unescape(request.args["_id"]))
 
     br = etree.SubElement(body, "br")
     send = etree.SubElement(body, "button", attrib=dict(onclick="updateEntry()"))
