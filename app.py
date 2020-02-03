@@ -356,6 +356,10 @@ def entry_submit():
         if key == "SemType2":
             agent.add_field([entry_id, "SemType2", value], rewrite=True)
 
+    agent.stop_session()
+
+    return "Submitted."
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
