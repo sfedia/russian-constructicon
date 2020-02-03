@@ -279,7 +279,8 @@ def entry_edit():
     types2add = [
         "ENTRY_ID", "language", "cee.OBJECT", "cefr", "definition.TEXT",
         "examples.TEXT", "syntax.OBJECT", "illustration", "lastModified",
-        "lastModifiedBy", "Structures", "SemType1", "SemType2"
+        "lastModifiedBy", "Structures", "SemType1", "SemType2",
+        "SemSubType1", "SemSubType2"
     ]
     _options = []
     for typ in types2add:
