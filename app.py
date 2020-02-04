@@ -308,9 +308,8 @@ def entry_edit():
     add_interface[-1].text = "Add field"
     types2add = [
         "ENTRY_ID", "language", "cee.OBJECT", "cefr", "definition.TEXT",
-        "examples.TEXT", "syntax.OBJECT", "illustration", "lastModified",
-        "lastModifiedBy", "Structures", "SemType1", "SemType2",
-        "SemSubType1", "SemSubType2"
+        "examples.TEXT", "syntax.OBJECT", "illustration", "Structures",
+        "SemType1", "SemType2", "SemSubType1", "SemSubType2"
     ]
     _options = []
     for typ in types2add:
