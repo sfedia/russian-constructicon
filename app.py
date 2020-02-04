@@ -243,14 +243,14 @@ def entry_repack(data):
 @app.route("/auth", methods=["GET", "POST"])
 def auth_func():
     m = login.LoginManager()
-    if request.method == "GET" or request.method == "POST" and "pwd" not in request.forms:
+    if request.method == "GET" or request.method == "POST" and "pwd" not in request.form:
         return render_template("credentials.html", returnto=request.args["returnto"])
     if request.method == "POST":
-        if request.forms["req_type"] == "register":
-            m.create_account(**request.forms)
+        if request.form["req_type"] == "register":
+            m.create_account(**request.form)
         resp = make_response("konstruktikon login")
-        resp.set_cookie("konst_session", m.get_session(**request.forms), max_age=60 * 60 * 24 * 365 * 2)
-        resp.headers["location"] = "/entry_edit?id=" + request.forms["returnto"]
+        resp.set_cookie("konst_session", m.get_session(**request.form), max_age=60 * 60 * 24 * 365 * 2)
+        resp.headers["location"] = "/entry_edit?id=" + request.form["returnto"]
         return resp, 302
 
 
@@ -338,7 +338,7 @@ def entry_edit():
         post_form.appendChild(table_data);
         post_form.appendChild(entry_id);
         document.body.appendChild(post_form);
-        document.forms[0].submit();
+        document.form[0].submit();
     }
     """
     script.text += "ENTRY_ID = '{_id}'".format(**request.args)
