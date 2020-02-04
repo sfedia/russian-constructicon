@@ -243,15 +243,18 @@ def entry_repack(data):
 @app.route("/auth", methods=["GET", "POST"])
 def auth_func():
     m = login.LoginManager()
-    if request.method == "GET" or request.method == "POST" and "userPwd" not in request.form:
-        return render_template("credentials.html", returnto=request.args["returnto"])
-    if request.method == "POST":
-        if request.form["req_type"] == "register":
-            m.create_account(**request.form)
-        resp = make_response("konstruktikon login")
-        resp.set_cookie("konst_session", m.get_session(**request.form), max_age=60 * 60 * 24 * 365 * 2)
-        resp.headers["location"] = "/entry_edit?id=" + request.form["returnto"]
-        return resp, 302
+    return render_template("credentials.html", returnto=request.args["returnto"])
+
+
+@app.route("/auth_", methods=["GET", "POST"])
+def auth_process():
+    m = login.LoginManager()
+    if request.form["req_type"] == "register":
+        m.create_account(**request.form)
+    resp = make_response("konstruktikon login")
+    resp.set_cookie("konst_session", m.get_session(**request.form), max_age=60 * 60 * 24 * 365 * 2)
+    resp.headers["location"] = "/entry_edit?id=" + request.form["returnto"]
+    return resp, 302
 
 
 @app.route("/entry_edit")
