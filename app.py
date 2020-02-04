@@ -243,7 +243,7 @@ def entry_repack(data):
 @app.route("/auth", methods=["GET", "POST"])
 def auth_func():
     m = login.LoginManager()
-    if request.method == "GET" or request.method == "POST" and "pwd" not in request.form:
+    if request.method == "GET" or request.method == "POST" and "userPwd" not in request.form:
         return render_template("credentials.html", returnto=request.args["returnto"])
     if request.method == "POST":
         if request.form["req_type"] == "register":
