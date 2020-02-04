@@ -3,6 +3,7 @@
 from flask import Flask, jsonify, Markup, render_template, request, send_file, make_response
 from lxml import etree
 from lxml.html import fromstring
+import datetime
 import html
 import json
 import konstruktikon_browser
@@ -11,6 +12,7 @@ import math
 import os
 import re
 import sqlite_browser
+import time
 import urllib.parse
 
 browser = konstruktikon_browser.Browser("konstruktikon2.xml")
@@ -371,6 +373,13 @@ def entry_submit():
     for _id, this in fields:
         for row in this:
             flds[row[1]] = row[2]
+
+    if table_items:
+        agent.add_field([
+            entry_id,
+            "lastModified",
+            datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+        ])
 
     for (key, value) in table_items:
         if key == "language":
