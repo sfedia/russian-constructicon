@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from flask import Flask, jsonify, Markup, render_template, request, send_file
+from flask import Flask, jsonify, Markup, render_template, request, send_file, make_response
 from lxml import etree
 from lxml.html import fromstring
 import html
@@ -242,14 +242,28 @@ def entry_repack(data):
 
 @app.route("/auth", methods=["GET", "POST"])
 def auth_func():
+    m = login.LoginManager()
     if request.method == "GET" or request.method == "POST" and "pwd" not in request.forms:
-        return render_template("credentials.html")
+        return render_template("credentials.html", returnto=request.args["returnto"])
+    if request.method == "POST":
+        if request.forms["req_type"] == "register":
+            m.create_account(**request.forms)
+        resp = make_response("konstruktikon login")
+        resp.set_cookie("konst_session", m.get_session(**request.forms), max_age=60 * 60 * 24 * 365 * 2)
+        resp.headers["location"] = "/entry_edit?id=" + request.forms["returnto"]
+        return resp, 302
 
 
 @app.route("/entry_edit")
 def entry_edit():
     if "_id" not in request.args:
         return "Invalid request"
+
+    s = request.cookies.get("login_session")
+    if not s:
+        resp = make_response("go auth")
+        resp.headers["location"] = "/auth?returnto=" + request.args["_id"]
+        return resp, 302
 
     browser = sqlite_browser.BaseBrowser()
     this = browser.get_entries("'%s'" % request.args["_id"])
@@ -259,6 +273,7 @@ def entry_edit():
     except IndexError:
         data = [("ENTRY_ID", request.args["_id"])]
 
+    data.append(("lastModifiedBy", s))
     data = entry_repack(data)
 
     browser.stop_session()
