@@ -253,7 +253,7 @@ def auth_process():
         m.create_account(**dict(request.form))
     resp = make_response("konstruktikon login")
     resp.set_cookie("konst_session", m.get_session(**dict(request.form)), max_age=60 * 60 * 24 * 365 * 2)
-    resp.headers["location"] = "/entry_edit?id=" + request.form["returnto"]
+    resp.headers["location"] = "/entry_edit?_id=" + request.form["returnto"]
     return resp, 302
 
 
@@ -262,7 +262,7 @@ def entry_edit():
     if "_id" not in request.args:
         return "Invalid request"
 
-    s = request.cookies.get("login_session")
+    s = request.cookies.get("konst_session")
     if not s:
         resp = make_response("go auth")
         resp.headers["location"] = "/auth?returnto=" + request.args["_id"]
