@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import itertools
 import json
 import lxml
 import sqlite3
@@ -10,6 +11,8 @@ class SQLAgent:
     def __init__(self, sqlite_filename="newBase.sqlite3"):
         self.sqlite_filename = sqlite_filename
         self.connector = sqlite3.connect(self.sqlite_filename)
+        #self.connector.enable_load_extension(True)
+        #self.connector.load_extension("./json1")
         self.cursor = self.connector.cursor()
 
     """konstruktikon_xml (entry_id text, field_type text, field_content text)"""
@@ -32,6 +35,11 @@ class SQLAgent:
     def stop_session(self):
         self.connector.commit()
         self.connector.close()
+
+    def get_entries(self, selector):
+        u_selector = "SELECT * FROM konstruktikon_xml WHERE entry_id IN (%s)" % selector
+        results = self.cursor.execute(u_selector).fetchall()
+        return itertools.groupby(results, key=lambda x: x[0])
 
 
 class SQLiteFieldsFrom:
@@ -89,7 +97,7 @@ class SQLiteFieldsFrom:
         for (level, value) in self.sem_types:
             if value:
                 self.my_fields.append(
-                    [self.sense_id, "Sem" + ("Sub" if level[1] > 1 else "") + "Type" + str(level[0]),
+                    [self.sense_id, "Sem" + ("Sub" if level[1] > 0 else "") + "Type" + str(level[0]),
                      value]
                 )
 
@@ -273,7 +281,7 @@ if __name__ == "__main__":
     agent = SQLAgent()
     sqlt_bases = []
     lengths = []
-    
+
     print(len(lex.xpath("//LexicalEntry")))
     for j, entry in enumerate(lex.xpath("//LexicalEntry")):
         q = SQLiteFieldsFrom(entry)

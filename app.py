@@ -1,12 +1,16 @@
 #!/usr/bin/python3
 
-from flask import Flask, jsonify, Markup, render_template, request, send_file
+from flask import Flask, jsonify, Markup, render_template, request, send_file, make_response
 from lxml import etree
+from lxml.html import fromstring
+import html
 import json
 import konstruktikon_browser
+import login
 import math
 import os
 import re
+import sqlite_browser
 import urllib.parse
 
 browser = konstruktikon_browser.Browser("konstruktikon2.xml")
@@ -197,11 +201,239 @@ def browser_search():
     )
 
 
+def entry_repack(data):
+    return_data = []
+    for (k, v) in data:
+        if k == "cee":
+            for _el in json.loads(v):
+                return_data.append(("cee.OBJECT", _el))
+        elif k == "syntax":
+            for _el in json.loads(v):
+                return_data.append(("syntax.OBJECT", _el))
+        elif k == "Structures":
+            for _el in json.loads(v):
+                return_data.append(("Structures.OBJECT", _el))
+        elif k == "definition":
+            common_text = ""
+            for part in json.loads(v)["definition"]:
+                if "content" in part and type(part["content"]) == str:
+                    common_text += part["content"]
+            common_text = re.sub(r"\n", " ", common_text)
+            common_text = re.sub(r"\s+", " ", common_text)
+            return_data.append(("definition.TEXT", common_text))
+        elif k == "examples":
+            for ex_json in json.loads(v)["examples"]:
+                example_text = ""
+                for part in ex_json:
+                    if "content" in part and type(part["content"]) == str:
+                        example_text += part["content"]
+                    if "children" in part:
+                        for part2 in part["children"]:
+                            if "content" in part2 and type(part2["content"]) == str:
+                                example_text += " " + part2["content"]
+                example_text = re.sub(r"\n", " ", example_text)
+                example_text = re.sub(r"\s+", " ", example_text)
+                return_data.append(("examples.OBJECT", example_text))
+        else:
+            return_data.append((k, v))
+
+    return return_data
+
+
+@app.route("/auth", methods=["GET", "POST"])
+def auth_func():
+    return render_template("credentials.html", returnto=request.args["returnto"])
+
+
+@app.route("/auth_", methods=["GET", "POST"])
+def auth_process():
+    m = login.LoginManager()
+    if request.form["req_type"] == "register":
+        m.create_account(**dict(request.form))
+    resp = make_response("konstruktikon login")
+    resp.set_cookie("konst_session", m.get_session(**dict(request.form)), max_age=60 * 60 * 24 * 365 * 2)
+    resp.headers["location"] = "/entry_edit?_id=" + request.form["returnto"]
+    return resp, 302
+
+
 @app.route("/entry_edit")
 def entry_edit():
-    return render_template(
-        "entry_edit.html"
-    )
+    if "_id" not in request.args:
+        return "Invalid request"
+
+    s = request.cookies.get("konst_session")
+    if not s:
+        resp = make_response("go auth")
+        resp.headers["location"] = "/auth?returnto=" + request.args["_id"]
+        return resp, 302
+
+    browser = sqlite_browser.BaseBrowser()
+    this = browser.get_entries("'%s'" % request.args["_id"])
+    try:
+        data = [list(g) for (k, g) in this][0]
+        data = [(x[1], x[2]) for x in data]
+    except IndexError:
+        data = [("ENTRY_ID", request.args["_id"])]
+
+    data.append(("lastModifiedBy", s))
+    data = entry_repack(data)
+
+    browser.stop_session()
+
+    body = etree.Element("body")
+    table = etree.SubElement(body, "table", attrib=dict(contenteditable="true"))
+
+    tr1 = etree.SubElement(table, "tr")
+
+    prop = etree.SubElement(tr1, "th")
+    prop.text = "Property"
+    val = etree.SubElement(tr1, "th")
+    val.text = "Value"
+    items = []
+
+    for (p, v) in data:
+        items.append(etree.SubElement(table, "tr"))
+        items.append(etree.SubElement(items[-1], "td"))
+        items[-1].text = p
+        items.append(etree.SubElement(items[-1], "td"))
+        items[-1].text = v
+
+    add_interface = [
+        etree.SubElement(body, "select"),
+        etree.SubElement(body, "input", attrib=dict(type="text")),
+        etree.SubElement(body, "button", attrib=dict(onclick="addField()"))
+    ]
+    add_interface[-1].text = "Add field"
+    types2add = [
+        "ENTRY_ID", "language", "cee.OBJECT", "cefr", "definition.TEXT",
+        "examples.TEXT", "syntax.OBJECT", "illustration", "lastModified",
+        "lastModifiedBy", "Structures", "SemType1", "SemType2",
+        "SemSubType1", "SemSubType2"
+    ]
+    _options = []
+    for typ in types2add:
+        _options.append(etree.SubElement(add_interface[0], "option", attrib=dict(value=typ)))
+        _options[-1].text = typ
+
+    script = etree.SubElement(body, "script")
+    script.text = """
+    function addField () {
+        item = document.createElement("tr");
+        prop = document.createElement("td");
+        prop.innerHTML = document.querySelector("select").value;
+        item.appendChild(prop);
+        val = document.createElement("td");
+        val.innerHTML = document.querySelector("input[type=text]").value;
+        item.appendChild(val);
+        document.querySelector("table").appendChild(item);
+    }
+    function updateEntry () {
+        post_form = document.createElement("form");
+        post_form.setAttribute("action", "/entry_submit");
+        post_form.setAttribute("method", "POST");
+        table_data = document.createElement("input");
+        table_data.setAttribute("name", "table_data");
+        table_data.setAttribute("value", document.querySelector("table").innerHTML);
+        entry_id = document.createElement("input");
+        entry_id.setAttribute("name", "entry_id");
+        entry_id.setAttribute("value", ENTRY_ID);
+        post_form.appendChild(table_data);
+        post_form.appendChild(entry_id);
+        document.body.appendChild(post_form);
+        document.form[0].submit();
+    }
+    """
+    script.text += "ENTRY_ID = '{_id}'".format(**request.args)
+
+    br = etree.SubElement(body, "br")
+    send = etree.SubElement(body, "button", attrib=dict(onclick="updateEntry()"))
+    send.text = "Update entry"
+
+    return etree.tostring(body, encoding="unicode")
+
+
+@app.route("/entry_submit", methods=["POST"])
+def entry_submit():
+    if "table_data" not in request.form or "entry_id" not in request.form:
+        return "Invalid request"
+
+    entry_id = request.form["entry_id"]
+    table = fromstring(request.form["table_data"])
+    table_items = []
+    for n, tr_tag in enumerate(table.cssselect("tr")):
+        if n == 0:
+            continue
+        table_items.append(el.text for el in tr_tag.cssselect("td"))
+
+    agent = sqlite_browser.BaseBrowser()
+    flds = {}
+    fields = agent.get_entries("'%s'" % entry_id)
+    for _id, this in fields:
+        for row in this:
+            flds[row[1]] = row[2]
+
+    for (key, value) in table_items:
+        if key == "language":
+            agent.add_field([entry_id, "language", value], rewrite=True)
+        if key == "cee.OBJECT":
+            if "cee" in flds:
+                agent.add_field([entry_id, "cee", json.dumps(json.loads(flds["cee"]) + [value])], True)
+            else:
+                agent.add_field([entry_id, "cee", json.dumps([value])])
+        if key == "cefr":
+            agent.add_field([entry_id, "cefr", value])
+        if key == "definition.TEXT":
+            agent.add_field([
+                entry_id,
+                "definition",
+                json.dumps(
+                    dict(
+                        definition=dict(
+                            type="InsideDefinition",
+                            cat="text",
+                            content=value,
+                            n="0"
+                        )
+                    )
+                )
+            ], rewrite=True)
+        if key == "examples.TEXT.OBJECT":
+            examples = json.loads(flds["examples"])["examples"]
+            examples.append(
+                dict(
+                    type="SimpleType",
+                    cat="text",
+                    content=value,
+                    n="0"
+                )
+            )
+            agent.add_field([
+                entry_id,
+                "examples",
+                json.dumps(dict(examples=examples))
+            ], rewrite=True)
+        if key == "syntax.OBJECT":
+            agent.add_field([
+                entry_id,
+                "syntax",
+                json.dumps(json.loads(flds["syntax"]) + [value])
+            ], rewrite=True)
+        if key == "illustration":
+            agent.add_field([entry_id, "illustration", value], rewrite=True)
+        if key == "Structures":
+            agent.add_field([entry_id, "Structures", value], rewrite=True)
+        if key == "SemType1":
+            agent.add_field([entry_id, "SemType1", value], rewrite=True)
+        if key == "SemSubType1":
+            agent.add_field([entry_id, "SemSubType1", value], rewrite=True)
+        if key == "SemType2":
+            agent.add_field([entry_id, "SemType2", value], rewrite=True)
+        if key == "SemSubType2":
+            agent.add_field([entry_id, "SemSubType2", value], rewrite=True)
+
+    agent.stop_session()
+
+    return "Submitted."
 
 
 if __name__ == "__main__":

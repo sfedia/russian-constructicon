@@ -36,7 +36,7 @@ class BaseBrowser(SQLAgent):
         select_queries = []
         if "substring" in filter_dict:
             select_queries.append(
-                "SELECT entry_id FROM konstruktikon_xml WHERE field_type LIKE '%{substr}%'".format(
+                "SELECT entry_id FROM konstruktikon_xml WHERE entry_id LIKE '%{substr}%'".format(
                     substr=filter_dict["substring"]
                 )
             )
@@ -64,6 +64,8 @@ class BaseBrowser(SQLAgent):
                     gram=filter_dict["gram_search"]
                 )
             )
+        if not select_queries:
+            select_queries = ["SELECT entry_id FROM konstruktikon_xml"]
 
         cefr_query_pre = ("(SELECT entry_id FROM konstruktikon_xml " +
             "WHERE entry_id in {select_queries} AND field_type='cefr' AND " +
@@ -106,5 +108,3 @@ class BaseBrowser(SQLAgent):
     lambda_str_equal = lambda v: "field_content='%s'" % escape_q(v)
     lambda_str_contains = lambda v: "'%s' in field_content" % escape_q(v)
     lambda_json_query = lambda q: q
-
-

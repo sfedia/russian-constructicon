@@ -100,6 +100,19 @@ main div.container {
           fastBrowsing(e);
       });
 
+      addNewConstruction = function (e) {
+        e.preventDefault();
+        window.location.href = "/entry_edit?_id=" + encodeURIComponent(
+          "konstruktikon-rus--" + $("#entry-id--postfix").val().replace(/\s/g, "_")
+        );
+      };
+
+      $(".add-new").click(addNewConstruction);
+      $("#entry-id--postfix").keypress(function (e) {
+        if (e.which === 13)
+          addNewConstruction(e);
+      });
+
       $(".just-browse").click(function (e) {
         var searchQuery = {};
         searchQuery.cefr = [];
@@ -220,6 +233,12 @@ main div.container {
           <input type="text" class="form-control" id="search-prefix" placeholder="Search word(s)">
         </div>
         <button type="button" class="btn btn-default prefix-browse">Search</button>
+      </form>
+      <form class="navbar-form navbar-right">
+          <div class="form-group">
+            <input type="text" class="form-control" id="entry-id--postfix" placeholder="Construction name">
+        </div>
+        <button type="button" class="btn btn-default add-new">Add</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
           <!--<li><a href="//github.com/ftyers/konstruktikon/blob/master/konstruktikon.xml">
@@ -920,7 +939,7 @@ main div.container {
 <footer class="footer mt-auto py-3">
   <div class="foot container text-muted">
     <span>
-        Developed & deployed by <a href="//github.com/prodotiscus/russian-constructicon">Fyodor Sizov</a> (2019),
+        Developed & deployed by <a href="//github.com/prodotiscus/russian-constructicon">Fyodor Sizov</a> (2020),
         <i>f.sizov@yandex.ru</i>
     </span>
   </div>
