@@ -250,9 +250,9 @@ def auth_func():
 def auth_process():
     m = login.LoginManager()
     if request.form["req_type"] == "register":
-        m.create_account(**request.form)
+        m.create_account(**dict(request.form))
     resp = make_response("konstruktikon login")
-    resp.set_cookie("konst_session", m.get_session(**request.form), max_age=60 * 60 * 24 * 365 * 2)
+    resp.set_cookie("konst_session", m.get_session(**dict(request.form)), max_age=60 * 60 * 24 * 365 * 2)
     resp.headers["location"] = "/entry_edit?id=" + request.form["returnto"]
     return resp, 302
 
