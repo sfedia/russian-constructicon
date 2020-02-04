@@ -242,7 +242,6 @@ def entry_repack(data):
 
 @app.route("/auth", methods=["GET", "POST"])
 def auth_func():
-    m = login.LoginManager()
     return render_template("credentials.html", returnto=request.args["returnto"])
 
 
