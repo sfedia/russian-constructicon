@@ -307,9 +307,9 @@ def entry_edit():
     ]
     add_interface[-1].text = "Add field"
     types2add = [
-        "ENTRY_ID", "language", "cee.OBJECT", "cefr", "definition.TEXT",
-        "examples.TEXT", "syntax.OBJECT", "illustration", "Structures",
-        "SemType1", "SemType2", "SemSubType1", "SemSubType2"
+        "examples.TEXT", "syntax.OBJECT", "illustration", "lastModified",
+        "lastModifiedBy", "Structures", "SemType1", "SemType2",
+        "SemSubType1", "SemSubType2", "usageLabels.OBJECT"
     ]
     _options = []
     for typ in types2add:
@@ -388,6 +388,11 @@ def entry_submit():
                 agent.add_field([entry_id, "cee", json.dumps(json.loads(flds["cee"]) + [value])], True)
             else:
                 agent.add_field([entry_id, "cee", json.dumps([value])])
+        if key == "usageLabels.OBJECT":
+            if "usageLabels" in flds:
+                agent.add_field([entry_id, "usageLabels", json.dumps(json.loads(flds["usageLabels"]) + [value])], True)
+            else:
+                agent.add_field([entry_id, "usageLabels", json.dumps([value])])
         if key == "cefr":
             agent.add_field([entry_id, "cefr", value])
         if key == "definition.TEXT":
