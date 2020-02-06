@@ -3,6 +3,7 @@
 from flask import Flask, jsonify, Markup, render_template, request, send_file, make_response
 from lxml import etree
 from lxml.html import fromstring
+import datetime
 import html
 import json
 import konstruktikon_browser
@@ -11,6 +12,7 @@ import math
 import os
 import re
 import sqlite_browser
+import time
 import urllib.parse
 
 browser = konstruktikon_browser.Browser("konstruktikon2.xml")
@@ -305,10 +307,9 @@ def entry_edit():
     ]
     add_interface[-1].text = "Add field"
     types2add = [
-        "ENTRY_ID", "language", "cee.OBJECT", "cefr", "definition.TEXT",
         "examples.TEXT", "syntax.OBJECT", "illustration", "lastModified",
         "lastModifiedBy", "Structures", "SemType1", "SemType2",
-        "SemSubType1", "SemSubType2"
+        "SemSubType1", "SemSubType2", "usageLabels.OBJECT"
     ]
     _options = []
     for typ in types2add:
@@ -372,6 +373,13 @@ def entry_submit():
         for row in this:
             flds[row[1]] = row[2]
 
+    if table_items:
+        agent.add_field([
+            entry_id,
+            "lastModified",
+            datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+        ])
+
     for (key, value) in table_items:
         if key == "language":
             agent.add_field([entry_id, "language", value], rewrite=True)
@@ -380,6 +388,11 @@ def entry_submit():
                 agent.add_field([entry_id, "cee", json.dumps(json.loads(flds["cee"]) + [value])], True)
             else:
                 agent.add_field([entry_id, "cee", json.dumps([value])])
+        if key == "usageLabels.OBJECT":
+            if "usageLabels" in flds:
+                agent.add_field([entry_id, "usageLabels", json.dumps(json.loads(flds["usageLabels"]) + [value])], True)
+            else:
+                agent.add_field([entry_id, "usageLabels", json.dumps([value])])
         if key == "cefr":
             agent.add_field([entry_id, "cefr", value])
         if key == "definition.TEXT":
