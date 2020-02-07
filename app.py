@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 
-from flask import Flask, jsonify, Markup, render_template, request, send_file, make_response
+from flask import Flask, url_for, request
 import requests
 app = Flask(__name__)
 
 
-@app.route('/<url>', methods=["GET", "POST"])
-def redirect(url):
-    return url
-    #return requests.get(url, params=request.args)
+@app.route('/<string:route_arg>/', methods=["GET", "POST"])
+def route(route_arg):
+    return url_for("route", **dict(request.args))
 
 
 if __name__ == "__main__":
