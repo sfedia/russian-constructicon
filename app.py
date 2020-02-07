@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 
 @app.route('/<context>', methods=["GET", "POST"])
-def redirect(page, context):
+def redirect(context):
     return context
 
 
