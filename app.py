@@ -7,7 +7,8 @@ app = Flask(__name__)
 
 @app.route('/<url>', methods=["GET", "POST"])
 def redirect(url):
-    return requests.get(url, params=request.args)
+    return url
+    #return requests.get(url, params=request.args)
 
 
 if __name__ == "__main__":
