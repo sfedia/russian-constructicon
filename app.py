@@ -16,7 +16,7 @@ def route(route_arg):
         'userID = %s' % request.args.get('userID'),
         'itemID = %s' % request.args.get('itemID'),
         # example of url
-        'url with args = %s' % url_for('route', **dict(request.args))
+        #'url with args = %s' % url_for('route', **dict(request.args))
     ]
     return '<br/>'.join(message)
 
