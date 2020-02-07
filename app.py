@@ -18,7 +18,7 @@ def route(route_arg):
         # example of url
         #'url with args = %s' % url_for('route', **dict(request.args))
     ]
-    return '<br/>'.join(message)
+    return url_for('route', **dict(request.args))
 
 
 if __name__ == "__main__":
