@@ -271,11 +271,12 @@ def entry_edit():
 
     browser = sqlite_browser.BaseBrowser()
     this = browser.get_entries("'%s'" % request.args["_id"])
+    data = [("ENTRY_ID", request.args["_id"])]
     try:
-        data = [list(g) for (k, g) in this][0]
-        data = [(x[1], x[2]) for x in data]
+        data += [list(g) for (k, g) in this][0]
+        data += [(x[1], x[2]) for x in data]
     except IndexError:
-        data = [("ENTRY_ID", request.args["_id"])]
+        pass
 
     data.append(("lastModifiedBy", s))
     data = entry_repack(data)
