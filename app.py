@@ -381,7 +381,10 @@ def entry_submit():
             datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
         ])
 
+    new_entry_id = None
     for (key, value) in table_items:
+        if key == "ENTRY_ID" and value != entry_id:
+            new_entry_id = value
         if key == "language":
             agent.add_field([entry_id, "language", value], rewrite=True)
         if key == "cee.OBJECT":
@@ -444,6 +447,9 @@ def entry_submit():
             agent.add_field([entry_id, "SemType2", value], rewrite=True)
         if key == "SemSubType2":
             agent.add_field([entry_id, "SemSubType2", value], rewrite=True)
+
+    if new_entry_id:
+        agent.change_entry_id(entry_id, new_entry_id)
 
     agent.stop_session()
 

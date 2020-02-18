@@ -21,6 +21,10 @@ class SQLAgent:
         for arg1 in fields:
             self.add_field(arg1, rewrite)
 
+    def change_entry_id(self, id1, id2):
+        self.cursor.execute(
+            "UPDATE konstruktikon_xml SET entry_id='%s' WHERE entry_id='%s'" % (id1, id2))
+
     def add_field(self, field_in_list, rewrite=False):
         print(field_in_list)
         entry_id, field_type, field_content = field_in_list
