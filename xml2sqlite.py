@@ -45,6 +45,10 @@ class SQLAgent:
         results = self.cursor.execute(u_selector).fetchall()
         return itertools.groupby(results, key=lambda x: x[0])
 
+    def counter(self, selector):
+        return self.cursor.execute(
+            "SELECT COUNT(*) FROM konstruktikon_xml WHERE entry_id IN (%s)" % selector).fetchone()[0]
+
 
 class SQLiteFieldsFrom:
     def __init__(self, lexical_entry):
