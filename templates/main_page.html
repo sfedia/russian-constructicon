@@ -39,8 +39,7 @@ main div.container {
   max-width: 600px;
 }
 
-.semantic-roles ul,
-.cefr-options ul,
+.semantic-roles ul
 .gram-search ul,
 .semantics ul,
 .syntax ul {
@@ -48,11 +47,6 @@ main div.container {
   column-gap: 2rem;
   list-style: none;
 }
-
-.cefr-options ul {
-  column-count: 2;
-}
-
 .navbar {
   min-height: 80px;
 }
@@ -116,7 +110,7 @@ main div.container {
       $(".just-browse").click(function (e) {
         var searchQuery = {};
         searchQuery.cefr = [];
-        $(".cefr-options ul li div label input[type=checkbox]").each(function (num, el) {
+        $(".cefr-options div input[type=checkbox]").each(function (num, el) {
             if (el.checked)
                 searchQuery.cefr.push(el.value);
         });
@@ -128,7 +122,7 @@ main div.container {
       $(".daily-dose").click(function (e) {
         var searchQuery = {};
         searchQuery.cefr = [];
-        $(".cefr-options ul li div label input[type=checkbox]").each(function (num, el) {
+        $(".cefr-options div input[type=checkbox]").each(function (num, el) {
             if (el.checked)
                 searchQuery.cefr.push(el.value);
         });
@@ -173,7 +167,7 @@ main div.container {
             delete searchQuery.gram_search;
 
         searchQuery.cefr = [];
-        $(".cefr-options ul li div label input[type=checkbox]").each(function (num, el) {
+        $(".cefr-options div input[type=checkbox]").each(function (num, el) {
             if (el.checked)
                 searchQuery.cefr.push(el.value);
         });
