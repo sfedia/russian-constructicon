@@ -857,9 +857,9 @@ main div.container {
                 <li><div class="checkbox">                  <label><input type="checkbox" value="Conj">Conjunction</label>                </div></li>
                 <li><div class="checkbox">                  <label><input type="checkbox" value="Matrix">Matrix predicate</label>                </div></li>
                 <li><div class="checkbox">                  <label><input type="checkbox" value="Nominal pattern">Nominal pattern</label> </div></li>
-                <li><div class="checkbox">                  <label><input type="checkbox" value="Parenth">Parenth</label>                </div></li>
-                <li><div class="checkbox">                  <label><input type="checkbox" value="Praedic">Praedic</label>                </div></li>
-                <li><div class="checkbox">                  <label><input type="checkbox" value="Prep">Prep</label>                </div></li>
+                <li><div class="checkbox">                  <label><input type="checkbox" value="Parenth">Parenthetical expression</label>                </div></li>
+                <li><div class="checkbox">                  <label><input type="checkbox" value="Praedic">Praedicative phrase</label>                </div></li>
+                <li><div class="checkbox">                  <label><input type="checkbox" value="Prep">Preposition</label>                </div></li>
                 <li><div class="checkbox">                  <label><input type="checkbox" value="Verb pattern">Verb pattern</label>                </div></li>
                 </ul>
               </div>
@@ -867,34 +867,36 @@ main div.container {
       </div>
 
       <div id="panel3" class="tab-pane fade">
-        <p>
-            <div class="form-group cefr-options">
-                <ul>
-                <li><div class="checkbox">
-                  <label><input type="checkbox" value="A1">A1</label>
-                </div></li>
-                <li><div class="checkbox">
-                  <label><input type="checkbox" value="A2">A2</label>
-                </div></li>
-                <li><div class="checkbox">
-                  <label><input type="checkbox" value="B1">B1</label>
-                </div></li>
-                <li><div class="checkbox">
-                  <label><input type="checkbox" value="B2">B2</label>
-                </div></li>
-                <li><div class="checkbox">
-                  <label><input type="checkbox" value="C1">C1</label>
-                </div></li>
-                <li><div class="checkbox">
-                  <label><input type="checkbox" value="C2">C2</label>
-                </div></li>
-                <a href="#" onclick='$(".cefr-options ul li div label input").attr("checked", true)'
-                   class="btn btn-primary" role="button" style="text-align: center; display: block;">
-                    All levels
-                </a>
-                </ul>
+        <div class="form-group cefr-options">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="fc-a1" type="checkbox" value="A1">
+                <label class="form-check-label" for="fc-a1">A1</label>
             </div>
-        </p>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="fc-a2" type="checkbox" value="A2">
+                <label class="form-check-label" for="fc-a2">A2</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="fc-b1" type="checkbox" value="B1">
+                <label class="form-check-label" for="fc-b1">B1</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="fc-b2" type="checkbox" value="B2">
+                <label class="form-check-label" for="fc-b2">B2</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="fc-c1" type="checkbox" value="C1">
+                <label class="form-check-label" for="fc-c1">C1</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="fc-c2" type="checkbox" value="C2">
+                <label class="form-check-label" for="fc-c2">C2</label>
+            </div>
+            <a href="#" onclick='$(".form-check-inline input").attr("checked", true)'
+               class="btn btn-primary" role="button" style="text-align: center; display: block;">
+                All levels
+            </a>
+        </div>
       </div>
       <div id="panel4" class="tab-pane fade">
         <h3>Grammatical categories</h3>
