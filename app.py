@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
 from flask import Flask, jsonify, Markup, render_template, request, send_file, make_response
 from lxml import etree
@@ -17,6 +18,7 @@ import urllib.parse
 
 browser = konstruktikon_browser.Browser("konstruktikon2.xml")
 app = Flask(__name__)
+application = app
 
 
 @app.route('/')
@@ -89,28 +91,31 @@ def browser_search():
     except json.decoder.JSONDecodeError:
         return "Invalid request"
 
-    results = browser.entries_walk(query)
+    sq_browser = sqlite_browser.BaseBrowser()
+    search_filter = sq_browser.generate_filter(query, limit=5, offset=offset)
+    counter = sq_browser.generate_filter(query)
+
     max_on_page = 5
     max_offsets = 20
+
+    found = sq_browser.get_entries(search_filter)
+    entries_num = sq_browser.counter(counter)
+    entries = []
 
     basic_url = SEARCH_URL + "?q=" + urllib.parse.quote(request.args["q"])
     index_url = [basic_url]
 
-    if len(results) < max_on_page * max_offsets:
-        page_indexes = list(range(1, math.ceil(len(results) / max_on_page) + 1))
+    if entries_num < max_on_page * max_offsets:
+        page_indexes = list(range(1, math.ceil(entries_num / max_on_page) + 1))
         pages_count = max_on_page
         for index in page_indexes:
             index_url.append(basic_url + "&offset=" + str(max_on_page * index) + "&index=" + str(index + 1))
     else:
         page_indexes = list(range(1, max_offsets + 1))
-        rest = math.ceil(len(results) / max_offsets)
+        rest = math.ceil(entries_num / max_offsets)
         pages_count = rest
         for n in range(1, max_offsets):
             index_url.append(basic_url + "&offset=" + str(rest * n) + "&index=" + str(n + 1))
-
-    query = json.loads(request.args["q"])
-    found = browser.entries_walk(query)
-    entries = []
 
     for tag in found:
         entry_dict = {}
